@@ -168,6 +168,9 @@ const dl = (root: Element): Record<string, string> =>
 const optional = (text: string | null) =>
   text ? (trim(text).toLowerCase() === "saknas" ? undefined : text) : undefined;
 
+/**
+ * Fetch metadata about a document from the Arbetsmiljöverket website.
+ */
 export async function document(id: string): Promise<Document> {
   const baseUrl = `https://www.av.se/om-oss/diarium-och-allmanna-handlingar/bestall-handlingar/Case/?id=`;
   const caseCode = id.split("-")[0];
