@@ -26,7 +26,7 @@ const DocumentSchema = z.object({
     z.literal("Anmälan, rapport från yrkeshygienisk mätning"),
     z.literal("Anmälan, smittämnen"),
     z.literal(
-      "Anmälan,Säkerhetsrapport/Tillsynsprogram från miljöfarlig verksamhet/SEVESO"
+      "Anmälan,Säkerhetsrapport/Tillsynsprogram från miljöfarlig verksamhet/SEVESO",
     ),
     z.literal("Annons"),
     z.literal("Anskaffningsbeslut"),
@@ -110,7 +110,7 @@ const DocumentSchema = z.object({
     z.literal("Tilldelningsbeslut"),
     z.literal("Tillsynsmeddelande"),
     z.literal(
-      "Tips från annan myndighet om misstänkt missförhållande på arbetsplats"
+      "Tips från annan myndighet om misstänkt missförhållande på arbetsplats",
     ),
     z.literal("Tips om misstänkt missförhållande på arbetsplats"),
     z.literal("Tjänsteanteckning"),
@@ -156,13 +156,13 @@ const dl = (root: Element): Record<string, string> =>
         const dd = dl.querySelectorAll("dd")[i];
         const key = trim(dt.textContent);
         const value = trim(
-          dd.querySelector("a")?.textContent || dd.textContent
+          dd.querySelector("a")?.textContent || dd.textContent,
         );
         result[key] = value;
       });
       return result;
     },
-    {}
+    {},
   );
 
 const optional = (text: string | null) =>
@@ -171,7 +171,7 @@ const optional = (text: string | null) =>
 /**
  * Fetch metadata about a document from the Arbetsmiljöverket website.
  */
-export async function document(id: string): Promise<Document> {
+export async function fetchDocument(id: string): Promise<Document> {
   const baseUrl = `https://www.av.se/om-oss/diarium-och-allmanna-handlingar/bestall-handlingar/Case/?id=`;
   const caseCode = id.split("-")[0];
   const caseUrl = `${baseUrl}${caseCode}`;
@@ -184,7 +184,7 @@ export async function document(id: string): Promise<Document> {
 
   const document = new JSDOM(html).window.document;
   const article = [...document.querySelectorAll("article")].find((a) =>
-    a.querySelector("h3")?.textContent?.includes(id)
+    a.querySelector("h3")?.textContent?.includes(id),
   );
 
   if (!article) {

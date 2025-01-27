@@ -1,15 +1,17 @@
 jest.mock("node-fetch", () => jest.fn());
 
-import fs from "fs/promises";
-import { document } from "./document";
+import fs from "fs";
+import { fetchDocument } from "../src/document";
 import fetch from "node-fetch";
+import { gunzipSync } from "zlib";
 
-describe("document", () => {
+describe("fetchDocument", () => {
   it("processes a typical employer-related filing with full metadata", async () => {
     (fetch as jest.Mock).mockResolvedValueOnce({
-      text: async () => fs.readFile("./2023:004796.html", "utf-8"),
+      text: async () =>
+        gunzipSync(fs.readFileSync("./test/2023:004796.html.gz")),
     });
-    const data = await document("2023/004796-8");
+    const data = await fetchDocument("2023/004796-8");
     expect(data).toEqual({
       documentCode: "2023/004796-8",
       documentDate: "2023-02-09",
@@ -25,9 +27,10 @@ describe("document", () => {
 
   it("processes a very empty filing with almost no metadata", async () => {
     (fetch as jest.Mock).mockResolvedValueOnce({
-      text: async () => fs.readFile("./2024:071290.html", "utf-8"),
+      text: async () =>
+        gunzipSync(fs.readFileSync("./test/2024:071290.html.gz")),
     });
-    const data = await document("2024/071290-1");
+    const data = await fetchDocument("2024/071290-1");
     expect(data).toEqual({
       documentCode: "2024/071290-1",
       documentDate: "2024-12-10",
@@ -41,9 +44,10 @@ describe("document", () => {
 
   it("processes a filing with a CFAR number belonging to a kommun", async () => {
     (fetch as jest.Mock).mockResolvedValueOnce({
-      text: async () => fs.readFile("./2024:060926.html", "utf-8"),
+      text: async () =>
+        gunzipSync(fs.readFileSync("./test/2024:060926.html.gz")),
     });
-    const data = await document("2024/060926-5");
+    const data = await fetchDocument("2024/060926-5");
     expect(data).toEqual({
       documentCode: "2024/060926-5",
       documentDate: "2025-01-25",
