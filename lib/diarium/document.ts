@@ -3,9 +3,9 @@ import _ from "lodash";
 import fetch from "node-fetch";
 import z from "zod";
 
-export type DocumentOrigin = "Inkommande" | "Utgående";
+export type DiariumDocumentOrigin = "Inkommande" | "Utgående";
 
-export type DocumentType =
+export type DiariumDocumentType =
   | "Anbud (vinnande)"
   | "Anbud (övriga)"
   | "Anbudsförfrågan/offertförfrågan"
@@ -127,11 +127,11 @@ export type DocumentType =
   | "Övriga handlingar administrera anskaffning"
   | "Övriga handlingar inspektion";
 
-export type Document = {
+export type DiariumDocument = {
   documentCode: string;
   documentDate: string;
-  documentOrigin: DocumentOrigin;
-  documentType: DocumentType;
+  documentOrigin: DiariumDocumentOrigin;
+  documentType: DiariumDocumentType;
   caseCode: string;
   caseName: string;
   caseSubject: string;
@@ -140,7 +140,7 @@ export type Document = {
   workplaceCode?: string;
 };
 
-const DocumentSchema = z.object({
+const DiariumDocumentSchema = z.object({
   documentCode: z.string(),
   documentDate: z.string(),
   documentOrigin: z.union([z.literal("Inkommande"), z.literal("Utgående")]),
@@ -304,7 +304,7 @@ const optional = (text: string | null) =>
 /**
  * Fetch metadata about a document from the Arbetsmiljöverket website.
  */
-export async function fetchDocument(id: string): Promise<Document> {
+export async function fetchDocument(id: string): Promise<DiariumDocument> {
   const baseUrl = `https://www.av.se/om-oss/diarium-och-allmanna-handlingar/bestall-handlingar/Case/?id=`;
   const caseCode = id.split("-")[0];
   const caseUrl = `${baseUrl}${caseCode}`;
@@ -356,7 +356,7 @@ export async function fetchDocument(id: string): Promise<Document> {
     workplaceCode,
   };
 
-  const validatedDocument = DocumentSchema.parse(unvalidatedDocument);
+  const validatedDocument = DiariumDocumentSchema.parse(unvalidatedDocument);
 
   return validatedDocument;
 }
