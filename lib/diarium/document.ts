@@ -128,7 +128,7 @@ export type DiariumDocumentType =
   | "Övriga handlingar inspektion";
 
 export type DiariumDocument = {
-  documentCode: string;
+  id: string;
   documentDate: string;
   documentOrigin: DiariumDocumentOrigin;
   documentType: DiariumDocumentType;
@@ -140,8 +140,8 @@ export type DiariumDocument = {
   workplaceCode?: string;
 };
 
-const DiariumDocumentSchema = z.object({
-  documentCode: z.string(),
+export const DiariumDocumentSchema = z.object({
+  id: z.string(),
   documentDate: z.string(),
   documentOrigin: z.union([z.literal("Inkommande"), z.literal("Utgående")]),
   documentType: z.union([
@@ -325,7 +325,6 @@ export async function fetchDocument(id: string): Promise<DiariumDocument> {
   }
 
   const definitions = dl(article);
-  const documentCode = definitions["Handlingsnummer"];
   const documentDate = definitions["Handlingens datum"];
   const documentOrigin = definitions["Handlingens ursprung"];
   const documentType = definitions["Handlingstyp"];
@@ -344,7 +343,7 @@ export async function fetchDocument(id: string): Promise<DiariumDocument> {
   const workplaceCode = optional(caseDefinitions["Arbetsställenummer (CFAR)"]);
 
   const unvalidatedDocument = {
-    documentCode,
+    id,
     documentDate,
     documentOrigin,
     documentType,

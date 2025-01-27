@@ -13,7 +13,7 @@ describe("fetchDocument", () => {
     });
     const data = await fetchDocument("2023/004796-8");
     expect(data).toEqual({
-      documentCode: "2023/004796-8",
+      id: "2023/004796-8",
       documentDate: "2023-02-09",
       documentOrigin: "Inkommande",
       documentType: "Komplettering",
@@ -32,7 +32,7 @@ describe("fetchDocument", () => {
     });
     const data = await fetchDocument("2024/071290-1");
     expect(data).toEqual({
-      documentCode: "2024/071290-1",
+      id: "2024/071290-1",
       documentDate: "2024-12-10",
       documentOrigin: "Utgående",
       documentType: "Avgiftsföreläggande",
@@ -49,7 +49,7 @@ describe("fetchDocument", () => {
     });
     const data = await fetchDocument("2024/060926-5");
     expect(data).toEqual({
-      documentCode: "2024/060926-5",
+      id: "2024/060926-5",
       documentDate: "2025-01-25",
       documentOrigin: "Utgående",
       documentType: "Beslut om att ärende avslutas (avslutsbrev)",
