@@ -3,7 +3,7 @@ import _ from "lodash";
 import fetch from "node-fetch";
 import z from "zod";
 
-export type DiariumDocumentOrigin = "Inkommande" | "Utgående";
+export type DiariumDocumentOrigin = "Inkommande" | "Upprättad" | "Utgående";
 
 export type DiariumDocumentType =
   | "Anbud (vinnande)"
@@ -473,7 +473,11 @@ export type DiariumDocument = {
 export const DiariumDocumentSchema = z.object({
   id: z.string(),
   documentDate: z.string(),
-  documentOrigin: z.union([z.literal("Inkommande"), z.literal("Utgående")]),
+  documentOrigin: z.union([
+    z.literal("Inkommande"),
+    z.literal("Upprättad"),
+    z.literal("Utgående"),
+  ]),
   documentType: z.union([
     z.literal("Anbud (vinnande)"),
     z.literal("Anbud (övriga)"),
@@ -1280,7 +1284,9 @@ const optional = (text: string | null) =>
 /**
  * Fetch metadata about a document from the Arbetsmiljöverket website.
  */
-export async function fetchDocument(id: string): Promise<DiariumDocument> {
+export async function fetchDiariumDocument(
+  id: string,
+): Promise<DiariumDocument> {
   const baseUrl = `https://www.av.se/om-oss/diarium-och-allmanna-handlingar/bestall-handlingar/Case/?id=`;
   const caseCode = id.split("-")[0];
   const caseUrl = `${baseUrl}${caseCode}`;
@@ -1384,63 +1390,3 @@ export async function fetchDocument(id: string): Promise<DiariumDocument> {
 
   return validatedDocument;
 }
-
-// export async function fetchPage(
-//   date: string,
-//   page: number,
-// ): Promise<DiariumDocument[]> {
-//   const baseUrl = `https://www.av.se/om-oss/diarium-och-allmanna-handlingar/bestall-handlingar/Case/?`;
-//   const query = {
-//     FromDate: date,
-//     ToDate: date,
-//     sortDirection: "asc",
-//     sortOrder: "Dokumentdatum",
-//     p: `${page}`,
-//   };
-//   const searchUrl = `${baseUrl}${new URLSearchParams(query)}`;
-
-//   const response = await fetch(searchUrl, {
-//     headers: {
-//       Cookie: "cookieacceptpreferences=0%2c1;",
-//     },
-//   });
-//   const html = await response.text();
-//   const document = new JSDOM(html).window.document;
-
-//   const results = Array.from(document.querySelectorAll(".document-list__item"));
-//   const documents = results.map((result) => {
-//     const h4span = result.querySelector(".headline-4 span:last-child");
-//     if (!h4span) throw new Error("Missing h4 span");
-//     const documentType = trim(h4span.textContent);
-
-//     const definitions = dl(result);
-//     console.log(definitions);
-
-//     const id = definitions["Handlingsnummer"];
-//     const documentDate = definitions["Handlingens datum"];
-//     const documentOrigin = definitions["Handlingens ursprung"];
-//     const caseCode = id.split("-")[0];
-//     const caseName = definitions["Ärende"];
-//     const caseSubject = definitions["Ämnesområde"];
-
-//     // export type DiariumDocument = {
-//     //   id: string;
-//     //   documentDate: string;
-//     //   documentOrigin: DiariumDocumentOrigin;
-//     //   documentType: DiariumDocumentType;
-//     //   caseCode: string;
-//     //   caseName: string;
-//     //   caseSubject: string;
-//     //   companyCode?: string;
-//     //   companyName?: string;
-//     //   workplaceCode?: string;
-//     // };
-
-//     // h4 = li.css(".headline-4")
-//     // span1 = h4.css("span").first
-//     // span2 = h4.css("span").last
-//     // document_type = span2.text.strip
-//   });
-
-//   return [];
-// }

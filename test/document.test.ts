@@ -1,17 +1,17 @@
 jest.mock("node-fetch", () => jest.fn());
 
 import fs from "fs";
-import { fetchDocument } from "../src/document";
+import { fetchDiariumDocument } from "../src/document";
 import fetch from "node-fetch";
 import { gunzipSync } from "zlib";
 
-describe("fetchDocument", () => {
+describe("fetchDiariumDocument", () => {
   it("processes a typical employer-related filing with full metadata", async () => {
     (fetch as jest.Mock).mockResolvedValueOnce({
       text: async () =>
         gunzipSync(fs.readFileSync("./test/2023:004796.html.gz")),
     });
-    const data = await fetchDocument("2023/004796-8");
+    const data = await fetchDiariumDocument("2023/004796-8");
     expect(data).toEqual({
       id: "2023/004796-8",
       documentDate: "2023-02-09",
@@ -34,7 +34,7 @@ describe("fetchDocument", () => {
       text: async () =>
         gunzipSync(fs.readFileSync("./test/2024:071290.html.gz")),
     });
-    const data = await fetchDocument("2024/071290-1");
+    const data = await fetchDiariumDocument("2024/071290-1");
     expect(data).toEqual({
       id: "2024/071290-1",
       documentDate: "2024-12-10",
@@ -51,7 +51,7 @@ describe("fetchDocument", () => {
       text: async () =>
         gunzipSync(fs.readFileSync("./test/2024:060926.html.gz")),
     });
-    const data = await fetchDocument("2024/060926-5");
+    const data = await fetchDiariumDocument("2024/060926-5");
     expect(data).toEqual({
       id: "2024/060926-5",
       documentDate: "2025-01-25",
@@ -71,14 +71,3 @@ describe("fetchDocument", () => {
     });
   });
 });
-
-// describe("fetchPage", () => {
-//   it("returns all documents from the page", async () => {
-//     (fetch as jest.Mock).mockResolvedValueOnce({
-//       text: async () =>
-//         gunzipSync(fs.readFileSync("./test/2025-01-07-p1.html.gz")),
-//     });
-//     const data = await fetchPage("2025-01-07", 1);
-//     expect(data).toEqual([]);
-//   });
-// });

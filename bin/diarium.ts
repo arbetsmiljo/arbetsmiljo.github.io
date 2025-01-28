@@ -5,7 +5,7 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { readFileSync } from "fs";
 import { createDatabase, readDocument, writeDocument } from "@/database";
-import { fetchDocument } from "@/document";
+import { fetchDiariumDocument } from "@/document";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -23,11 +23,11 @@ program
   });
 
 program
-  .command("fetchDocument")
+  .command("fetchDiariumDocument")
   .description("Fetch document metadata")
   .argument("<id>", "Document ID")
   .action(async (id) => {
-    const data = await fetchDocument(id);
+    const data = await fetchDiariumDocument(id);
     process.stdout.write(`${JSON.stringify(data, null, 2)}\n`);
   });
 
