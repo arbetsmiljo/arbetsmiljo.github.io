@@ -6,6 +6,7 @@ import { fileURLToPath } from "url";
 import { readFileSync } from "fs";
 import { createDatabase, readDocument, writeDocument } from "@/database";
 import { fetchDiariumDocument } from "@/document";
+import { ingestDiariumDay } from "@/ingestion";
 import { fetchDiariumPage } from "@/pagination";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -40,6 +41,14 @@ program
   .action(async (date, page) => {
     const data = await fetchDiariumPage(date, parseInt(page));
     process.stdout.write(`${JSON.stringify(data, null, 2)}\n`);
+  });
+
+program
+  .command("ingestDiariumDay")
+  .description("Download a day's worth of documents")
+  .argument("<date>", "Day")
+  .action(async (date) => {
+    await ingestDiariumDay(date);
   });
 
 program

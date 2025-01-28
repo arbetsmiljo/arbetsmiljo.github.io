@@ -2,6 +2,7 @@ import { JSDOM } from "jsdom";
 import _ from "lodash";
 import fetch from "node-fetch";
 import { type DiariumDocument, DiariumDocumentSchema } from "./document";
+import fs from "fs";
 
 /**
  * List of DiariumDocument properties that we can't retrieve directly from the
@@ -118,7 +119,7 @@ export async function fetchDiariumPage(
     return validatedDocument;
   });
 
-  const hitCountElement = document.querySelector("[data-dd-search-hits]");
+  const hitCountElement = document.querySelector("#dd-pagination-result-total");
   if (!hitCountElement) throw new Error("Hit count not found");
   const hitCountText = hitCountElement.textContent!.trim();
   const hitCount = parseInt(hitCountText);
