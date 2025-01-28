@@ -1,10 +1,15 @@
+import { writeDocument } from "./database";
 import { fetchDiariumDocument } from "./document";
 import { fetchDiariumPage } from "./pagination";
 import ora from "ora-classic";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export async function ingestDiariumDay(date: string, ms = 1000) {
+export async function ingestDiariumDay(
+  date: string,
+  filename: string,
+  ms = 1000,
+) {
   let pageNumber = 1;
   let pageSpinner = ora(` Page ${pageNumber}`).start();
   let page = await fetchDiariumPage(date, pageNumber);
@@ -25,6 +30,7 @@ export async function ingestDiariumDay(date: string, ms = 1000) {
       const documentSpinner = ora(` ${id}`).start();
       await delay(ms);
       const document = await fetchDiariumDocument(id);
+      await writeDocument(filename, document);
       documentSpinner.succeed(
         ` ${document.id}: ${document.documentType} ${document.companyName ? `(${document.companyName})` : ""}`,
       );
