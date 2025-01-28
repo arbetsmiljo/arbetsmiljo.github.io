@@ -6,6 +6,7 @@ import { fileURLToPath } from "url";
 import { readFileSync } from "fs";
 import { createDatabase, readDocument, writeDocument } from "@/database";
 import { fetchDiariumDocument } from "@/document";
+import { fetchDiariumPage } from "@/pagination";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -31,15 +32,15 @@ program
     process.stdout.write(`${JSON.stringify(data, null, 2)}\n`);
   });
 
-// program
-//   .command("fetchPage")
-//   .description("Fetch metadata for multiple documents")
-//   .argument("<date>", "Day")
-//   .argument("<page>", "For pagination")
-//   .action(async (date, page) => {
-//     const data = await fetchPage(date, parseInt(page));
-//     process.stdout.write(`${JSON.stringify(data, null, 2)}\n`);
-//   });
+program
+  .command("fetchDiariumPage")
+  .description("Fetch metadata for multiple documents")
+  .argument("<date>", "Day")
+  .argument("<page>", "Page number")
+  .action(async (date, page) => {
+    const data = await fetchDiariumPage(date, parseInt(page));
+    process.stdout.write(`${JSON.stringify(data, null, 2)}\n`);
+  });
 
 program
   .command("readDocument")

@@ -471,8 +471,12 @@ export type DiariumDocument = {
 };
 
 export const DiariumDocumentSchema = z.object({
-  id: z.string(),
-  documentDate: z.string(),
+  id: z.string().regex(/^\d{4}\/\d{6}-\d+$/, {
+    message: "Invalid format, expected YYYY/000000-1",
+  }),
+  documentDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
+    message: "Invalid date format, expected yyyy-mm-dd",
+  }),
   documentOrigin: z.union([
     z.literal("Inkommande"),
     z.literal("Upprättad"),
@@ -605,10 +609,23 @@ export const DiariumDocumentSchema = z.object({
     z.literal("Övriga handlingar inspektion"),
   ]),
 
-  caseCode: z.string(),
+  caseCode: z.string().regex(/^\d{4}\/\d{6}$/, {
+    message: "Invalid format, expected YYYY/000000",
+  }),
   caseName: z.string(),
   caseSubject: z.string(),
-  companyCode: z.string().optional(),
+  companyCode: z
+    .string()
+    .regex(/^\d{6}-?\d{4}$/, {
+      message: "Invalid format, expected 555555-5555",
+    })
+    .optional()
+    .transform((val) => {
+      if (val && val.includes("-")) {
+        return val.split("-").join("");
+      }
+      return val;
+    }),
   companyName: z.string().optional(),
   workplaceCode: z.string().optional(),
   workplaceName: z.string().optional(),
