@@ -132,10 +132,7 @@ export async function readDocument(
         if (error) {
           reject(error);
         } else {
-          const document = DatabaseDocumentSchema.parse(
-            row,
-          ) as DatabaseDocument;
-          resolve(document);
+          resolve(row);
         }
       },
     );
