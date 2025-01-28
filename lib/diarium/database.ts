@@ -51,7 +51,13 @@ export async function writeDocument(
   if (!fs.existsSync(filename)) {
     throw new Error(`Database file not found: ${filename}`);
   }
-  const validatedDocument = DiariumDocumentSchema.parse(document);
+  let validatedDocument: DiariumDocument;
+  try {
+    validatedDocument = DiariumDocumentSchema.parse(document);
+  } catch (error) {
+    console.error(document);
+    throw new Error(`Invalid document: ${error}`);
+  }
   const database = new sqlite3.Database(filename);
   database.run(
     `
