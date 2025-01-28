@@ -4,10 +4,10 @@ import { Command } from "commander";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { readFileSync } from "fs";
-import { createDatabase, readDocument, writeDocument } from "@/database";
-import { fetchDiariumDocument } from "@/document";
-import { ingestDiariumDay } from "@/ingestion";
-import { fetchDiariumPage } from "@/pagination";
+import { createDatabase, readDocument, writeDocument } from "./database";
+import { fetchDiariumDocument } from "./document";
+import { ingestDiariumDay } from "./ingestion";
+import { fetchDiariumPage } from "./pagination";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
