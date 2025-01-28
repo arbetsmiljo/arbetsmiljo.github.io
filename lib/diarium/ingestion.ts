@@ -1,4 +1,4 @@
-import { writeDocument } from "./database";
+import { readDocument, writeDocument } from "./database";
 import { fetchDiariumDocument } from "./document";
 import { fetchDiariumPage } from "./pagination";
 import ora from "ora-classic";
@@ -30,6 +30,11 @@ export async function ingestDiariumDay(
       const documentSpinner = ora(` ${id}`).start();
       await delay(ms);
       const document = await fetchDiariumDocument(id);
+      const existingDocument = await readDocument(filename, id);
+      if (existingDocument) {
+        documentSpinner.warn(` ${document.id}: Already exists`);
+        continue;
+      }
       await writeDocument(filename, document);
       documentSpinner.succeed(
         ` ${document.id}: ${document.documentType} ${document.companyName ? `(${document.companyName})` : ""}`,
