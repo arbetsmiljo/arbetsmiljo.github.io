@@ -1,6 +1,6 @@
 import { fetchDiariumDocument } from "./document";
 import { fetchDiariumPage } from "./pagination";
-import ora from "ora";
+import ora from "ora-classic";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 

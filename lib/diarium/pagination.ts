@@ -1,8 +1,7 @@
 import { JSDOM } from "jsdom";
 import _ from "lodash";
-import fetch from "node-fetch";
+import fetch from "cross-fetch";
 import { type DiariumDocument, DiariumDocumentSchema } from "./document";
-import fs from "fs";
 
 /**
  * List of DiariumDocument properties that we can't retrieve directly from the

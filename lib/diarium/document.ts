@@ -1,6 +1,6 @@
 import { JSDOM } from "jsdom";
 import _ from "lodash";
-import fetch from "node-fetch";
+import fetch from "cross-fetch";
 import z from "zod";
 
 export type DiariumDocumentOrigin = "Inkommande" | "Upprättad" | "Utgående";
