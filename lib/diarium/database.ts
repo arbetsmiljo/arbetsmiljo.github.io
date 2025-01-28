@@ -35,6 +35,11 @@ export async function createDatabase(filename: string): Promise<void> {
       companyCode TEXT,
       companyName TEXT,
       workplaceCode TEXT
+      workplaceName TEXT
+      countyCode TEXT
+      countyName TEXT
+      municipalityCode TEXT
+      municipalityName TEXT
     );
 `);
 }
@@ -60,7 +65,12 @@ export async function writeDocument(
       caseSubject,
       companyCode,
       companyName,
-      workplaceCode
+      workplaceCode,
+      workplaceName
+      countyCode,
+      countyName,
+      municipalityCode,
+      municipalityName
     ) VALUES (
       $id,
       $documentDate,
@@ -71,7 +81,12 @@ export async function writeDocument(
       $caseSubject,
       $companyCode,
       $companyName,
-      $workplaceCode
+      $workplaceCode,
+      $workplaceName,
+      $countyCode,
+      $countyName,
+      $municipalityCode,
+      $municipalityName
     );`,
     {
       $id: validatedDocument.id,
@@ -84,6 +99,11 @@ export async function writeDocument(
       $companyCode: validatedDocument.companyCode,
       $companyName: validatedDocument.companyName,
       $workplaceCode: validatedDocument.workplaceCode,
+      $workplaceName: validatedDocument.workplaceName,
+      $countyCode: validatedDocument.countyCode,
+      $countyName: validatedDocument.countyName,
+      $municipalityCode: validatedDocument.municipalityCode,
+      $municipalityName: validatedDocument.municipalityName,
     },
   );
 }

@@ -31,6 +31,16 @@ program
     process.stdout.write(`${JSON.stringify(data, null, 2)}\n`);
   });
 
+// program
+//   .command("fetchPage")
+//   .description("Fetch metadata for multiple documents")
+//   .argument("<date>", "Day")
+//   .argument("<page>", "For pagination")
+//   .action(async (date, page) => {
+//     const data = await fetchPage(date, parseInt(page));
+//     process.stdout.write(`${JSON.stringify(data, null, 2)}\n`);
+//   });
+
 program
   .command("readDocument")
   .option("-f, --filename <filename>", "database filename", "db.sqlite")

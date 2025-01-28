@@ -22,6 +22,10 @@ describe("fetchDocument", () => {
       caseSubject: "Hantera tillstånd",
       companyCode: "5567037485",
       companyName: "SPOTIFY AB",
+      countyCode: "01",
+      countyName: "STOCKHOLMS LÄN",
+      municipalityCode: "0180",
+      municipalityName: "Stockholm",
     });
   });
 
@@ -59,6 +63,22 @@ describe("fetchDocument", () => {
       companyCode: "2120002726",
       companyName: "GÄLLIVARE KOMMUN",
       workplaceCode: "19223593",
+      workplaceName: "RÄDDNINGSTJÄNST",
+      countyCode: "25",
+      countyName: "NORRBOTTENS LÄN",
+      municipalityCode: "2523",
+      municipalityName: "Gällivare",
     });
   });
 });
+
+// describe("fetchPage", () => {
+//   it("returns all documents from the page", async () => {
+//     (fetch as jest.Mock).mockResolvedValueOnce({
+//       text: async () =>
+//         gunzipSync(fs.readFileSync("./test/2025-01-07-p1.html.gz")),
+//     });
+//     const data = await fetchPage("2025-01-07", 1);
+//     expect(data).toEqual([]);
+//   });
+// });
