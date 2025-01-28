@@ -34,11 +34,11 @@ export async function createDatabase(filename: string): Promise<void> {
       caseSubject TEXT NOT NULL,
       companyCode TEXT,
       companyName TEXT,
-      workplaceCode TEXT
-      workplaceName TEXT
-      countyCode TEXT
-      countyName TEXT
-      municipalityCode TEXT
+      workplaceCode TEXT,
+      workplaceName TEXT,
+      countyCode TEXT,
+      countyName TEXT,
+      municipalityCode TEXT,
       municipalityName TEXT
     );
 `);
@@ -66,7 +66,7 @@ export async function writeDocument(
       companyCode,
       companyName,
       workplaceCode,
-      workplaceName
+      workplaceName,
       countyCode,
       countyName,
       municipalityCode,
