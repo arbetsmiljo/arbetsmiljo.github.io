@@ -47,8 +47,9 @@ program
   .command("ingestDiariumDay")
   .description("Download a day's worth of documents")
   .argument("<date>", "Day")
-  .action(async (date) => {
-    await ingestDiariumDay(date);
+  .option("-m, --ms <ms>", "Delay between requests", 1000)
+  .action(async (date, { ms }) => {
+    await ingestDiariumDay(date, parseInt(ms));
   });
 
 program
