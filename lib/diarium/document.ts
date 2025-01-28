@@ -617,7 +617,7 @@ export const DiariumDocumentSchema = z.object({
   companyCode: z
     .string()
     .regex(/^\d{6}-?\d{4}$/, {
-      message: "Invalid format, expected 555555-5555",
+      message: "Invalid format, expected 123456-1234",
     })
     .optional()
     .transform((val) => {
@@ -627,7 +627,12 @@ export const DiariumDocumentSchema = z.object({
       return val;
     }),
   companyName: z.string().optional(),
-  workplaceCode: z.string().optional(),
+  workplaceCode: z
+    .string()
+    .regex(/^\d{8}$/, {
+      message: "Invalid format, expected 12345678",
+    })
+    .optional(),
   workplaceName: z.string().optional(),
 
   countyCode: z
