@@ -114,10 +114,7 @@ export async function writeDocument(
   );
 }
 
-export async function readDocument(
-  filename: string,
-  id: string,
-): Promise<DatabaseDocument> {
+export async function readDocument(filename: string, id: string): Promise<any> {
   if (!fs.existsSync(filename)) {
     throw new Error(`Database file not found: ${filename}`);
   }
