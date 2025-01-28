@@ -35,7 +35,5 @@ export async function ingestDiariumDay(
         ` ${document.id}: ${document.documentType} ${document.companyName ? `(${document.companyName})` : ""}`,
       );
     }
-
-    remaining = 0;
   }
 }
