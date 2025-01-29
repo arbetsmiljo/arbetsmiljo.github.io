@@ -3,56 +3,8 @@ import _ from "lodash";
 import fetch from "cross-fetch";
 import { type DiariumDocument, DiariumDocumentSchema } from "./document";
 
-/**
- * List of DiariumDocument properties that we can't retrieve directly from the
- * paginated result data. This is the stuff we need to do an HTTP request per
- * document in order to retrieve.
- *
- * In practice loads of these actually _are_ available in the paginated result
- * data. But as there's no immediate use case for any of them this is just a
- * list of every DiariumDocument property except ID. The point is for it to
- * serve as a bit of a to-do list for implementing scraping logic here if a use
- * case ever arises. Just remove each one from the list as its scraping logic is
- * added to `fetchDiariumPage`.
- */
-export type DiariumDocumentPropertiesUnavailableInPagination =
-  | "documentDate"
-  | "documentOrigin"
-  | "documentType"
-  | "caseCode"
-  | "caseName"
-  | "caseSubject"
-  | "companyCode"
-  | "companyName"
-  | "workplaceCode"
-  | "workplaceName"
-  | "countyCode"
-  | "countyName"
-  | "municipalityCode"
-  | "municipalityName";
-
-const DiariumPaginationDocumentSchema = DiariumDocumentSchema.omit({
-  documentDate: true,
-  documentOrigin: true,
-  documentType: true,
-  caseCode: true,
-  caseName: true,
-  caseSubject: true,
-  companyCode: true,
-  companyName: true,
-  countyCode: true,
-  countyName: true,
-  municipalityCode: true,
-  municipalityName: true,
-});
-
-export type DiariumPaginationDocument = Omit<
-  DiariumDocument,
-  DiariumDocumentPropertiesUnavailableInPagination
->;
-
 export type DiariumPage = {
-  documents: DiariumPaginationDocument[];
+  documents: DiariumDocument[];
   number: number;
   total: number;
   start: number;
@@ -102,22 +54,21 @@ export async function fetchDiariumPage(
   const results = Array.from(document.querySelectorAll(".document-list__item"));
   const documents = results.map((result) => {
     const definitions = dl(result);
-    const id = definitions["Handlingsnummer"].trim();
-    // const documentDate = definitions["Handlingens datum"];
-    // const documentOrigin = definitions["Handlingens ursprung"];
-    // const caseCode = id.split("-")[0];
-    // const caseName = definitions["Ärende"];
-    // const caseSubject = definitions["Ämnesområde"];
-    // const companyName = optional(definitions["Företag/organisation"]);
-    // const companyCode = optional(definitions["Organisationsnummer:"]);
-    // const workplaceCode = optional(definitions["Arbetsställenummer (CFAR)"]);
-    // const workplaceName = optional(definitions["Arbetsställe"]);
+    const documentId = trim(definitions["Handlingsnummer"].trim());
+    const documentType = trim(
+      result.querySelector("h2 span:last-child")?.innerHTML ?? "",
+    );
+    const documentDate = trim(definitions["Handlingens datum"]);
+    const documentOrigin = trim(definitions["Handlingens ursprung"]);
     const unvalidatedDocument = {
-      id,
+      documentId,
+      documentType,
+      documentDate,
+      documentOrigin,
     };
-    const validatedDocument = DiariumPaginationDocumentSchema.parse(
+    const validatedDocument = DiariumDocumentSchema.parse(
       unvalidatedDocument,
-    ) as DiariumPaginationDocument;
+    ) as DiariumDocument;
     return validatedDocument;
   });
 

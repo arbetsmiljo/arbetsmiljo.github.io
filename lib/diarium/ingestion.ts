@@ -1,5 +1,5 @@
 import { readDocument, writeDocument } from "./database";
-import { fetchDiariumDocument } from "./document";
+import { fetchDiariumCase } from "./case";
 import { DiariumPage, fetchDiariumPage } from "./pagination";
 import ora from "ora-classic";
 
@@ -22,18 +22,19 @@ export async function ingestDiariumDay(
     );
 
     for (let i = 0; i < page.documents.length; i++) {
-      const { id } = page.documents[i];
-      const documentSpinner = ora(` ${id}`).start();
-      const existingDocument = await readDocument(filename, id);
+      const diariumDocument = page.documents[i];
+      const { documentId } = diariumDocument;
+      const documentSpinner = ora(` ${documentId}`).start();
+      const existingDocument = await readDocument(filename, documentId);
       if (existingDocument) {
-        documentSpinner.warn(` ${id}: Already exists`);
+        documentSpinner.warn(` ${documentId}: Already exists`);
         continue;
       }
       await delay(ms);
-      const document = await fetchDiariumDocument(id);
-      await writeDocument(filename, document);
+      const diariumCase = await fetchDiariumCase(documentId.split("-")[0]);
+      await writeDocument(filename, diariumDocument, diariumCase);
       documentSpinner.succeed(
-        ` ${document.id}: ${document.documentType} ${document.companyName ? `(${document.companyName})` : ""}`,
+        ` ${diariumDocument.documentId}: ${diariumDocument.documentType} ${diariumCase.companyName ? `(${diariumCase.companyName})` : ""}`,
       );
     }
 

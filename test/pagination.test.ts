@@ -15,34 +15,64 @@ describe("fetchDiariumPage", () => {
     expect(page.documents).toMatchInlineSnapshot(`
 [
   {
-    "id": "2024/045202-2",
+    "documentDate": "2025-01-07",
+    "documentId": "2024/045202-2",
+    "documentOrigin": "Upprättad",
+    "documentType": "Tjänsteanteckning",
   },
   {
-    "id": "2024/015728-18",
+    "documentDate": "2025-01-07",
+    "documentId": "2024/015728-18",
+    "documentOrigin": "Upprättad",
+    "documentType": "Tjänsteanteckning",
   },
   {
-    "id": "2024/066192-5",
+    "documentDate": "2025-01-07",
+    "documentId": "2024/066192-5",
+    "documentOrigin": "Upprättad",
+    "documentType": "Beslut om slutligt omedelbart förbud",
   },
   {
-    "id": "2024/043715-7",
+    "documentDate": "2025-01-07",
+    "documentId": "2024/043715-7",
+    "documentOrigin": "Upprättad",
+    "documentType": "Tjänsteanteckning",
   },
   {
-    "id": "2024/030533-30",
+    "documentDate": "2025-01-07",
+    "documentId": "2024/030533-30",
+    "documentOrigin": "Upprättad",
+    "documentType": "Tjänsteanteckning",
   },
   {
-    "id": "2024/056665-12",
+    "documentDate": "2025-01-07",
+    "documentId": "2024/056665-12",
+    "documentOrigin": "Utgående",
+    "documentType": "Underrättelse om föreläggande/förbud",
   },
   {
-    "id": "2024/073043-4",
+    "documentDate": "2025-01-07",
+    "documentId": "2024/073043-4",
+    "documentOrigin": "Upprättad",
+    "documentType": "Tjänsteanteckning",
   },
   {
-    "id": "2024/068340-5",
+    "documentDate": "2025-01-07",
+    "documentId": "2024/068340-5",
+    "documentOrigin": "Upprättad",
+    "documentType": "Faktaunderlag",
   },
   {
-    "id": "2024/074019-1",
+    "documentDate": "2025-01-07",
+    "documentId": "2024/074019-1",
+    "documentOrigin": "Utgående",
+    "documentType": "Avgiftsföreläggande",
   },
   {
-    "id": "2024/070678-3",
+    "documentDate": "2025-01-07",
+    "documentId": "2024/070678-3",
+    "documentOrigin": "Utgående",
+    "documentType": "Beslut",
   },
 ]
 `);

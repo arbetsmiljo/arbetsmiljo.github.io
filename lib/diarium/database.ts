@@ -1,5 +1,6 @@
 import sqlite3 from "sqlite3";
 import fs from "fs";
+import { type DiariumCase, DiariumCaseSchema } from "./case";
 import { type DiariumDocument, DiariumDocumentSchema } from "./document";
 import z from "zod";
 
@@ -24,92 +25,103 @@ export async function createDatabase(filename: string): Promise<void> {
   const database = new sqlite3.Database(filename);
   database.exec(`
     CREATE TABLE documents (
-      id TEXT PRIMARY KEY NOT NULL,
-      created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      documentId TEXT PRIMARY KEY NOT NULL,
       documentDate TEXT NOT NULL,
       documentOrigin TEXT NOT NULL,
       documentType TEXT NOT NULL,
-      caseCode TEXT NOT NULL,
+      caseId TEXT NOT NULL,
       caseName TEXT NOT NULL,
       caseSubject TEXT NOT NULL,
-      companyCode TEXT,
+      companyId TEXT,
       companyName TEXT,
-      workplaceCode TEXT,
+      workplaceId TEXT,
       workplaceName TEXT,
-      countyCode TEXT,
+      countyId TEXT,
       countyName TEXT,
-      municipalityCode TEXT,
-      municipalityName TEXT
+      municipalityId TEXT,
+      municipalityName TEXT,
+      created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 `);
 }
 
 export async function writeDocument(
   filename: string,
-  document: object,
+  diariumDocument: object,
+  diariumCase: object,
 ): Promise<void> {
   if (!fs.existsSync(filename)) {
     throw new Error(`Database file not found: ${filename}`);
   }
+
   let validatedDocument: DiariumDocument;
   try {
-    validatedDocument = DiariumDocumentSchema.parse(document);
+    validatedDocument = DiariumDocumentSchema.parse(diariumDocument);
   } catch (error) {
-    console.error(document);
+    console.error(diariumDocument);
     throw new Error(`Invalid document: ${error}`);
   }
+
+  let validatedCase: DiariumCase;
+  try {
+    validatedCase = DiariumCaseSchema.parse(diariumCase);
+  } catch (error) {
+    console.error(diariumCase);
+    throw new Error(`Invalid case: ${error}`);
+  }
+
   const database = new sqlite3.Database(filename);
   database.run(
     `
     INSERT INTO documents (
-      id,
+      documentId,
       documentDate,
       documentOrigin,
       documentType,
-      caseCode,
+      caseId,
       caseName,
       caseSubject,
-      companyCode,
+      companyId,
       companyName,
-      workplaceCode,
+      workplaceId,
       workplaceName,
-      countyCode,
+      countyId,
       countyName,
-      municipalityCode,
+      municipalityId,
       municipalityName
     ) VALUES (
-      $id,
+      $documentId,
       $documentDate,
       $documentOrigin,
       $documentType,
-      $caseCode,
+      $caseId,
       $caseName,
       $caseSubject,
-      $companyCode,
+      $companyId,
       $companyName,
-      $workplaceCode,
+      $workplaceId,
       $workplaceName,
-      $countyCode,
+      $countyId,
       $countyName,
-      $municipalityCode,
+      $municipalityId,
       $municipalityName
     );`,
     {
-      $id: validatedDocument.id,
+      $documentId: validatedDocument.documentId,
       $documentDate: validatedDocument.documentDate,
       $documentOrigin: validatedDocument.documentOrigin,
       $documentType: validatedDocument.documentType,
-      $caseCode: validatedDocument.caseCode,
-      $caseName: validatedDocument.caseName,
-      $caseSubject: validatedDocument.caseSubject,
-      $companyCode: validatedDocument.companyCode,
-      $companyName: validatedDocument.companyName,
-      $workplaceCode: validatedDocument.workplaceCode,
-      $workplaceName: validatedDocument.workplaceName,
-      $countyCode: validatedDocument.countyCode,
-      $countyName: validatedDocument.countyName,
-      $municipalityCode: validatedDocument.municipalityCode,
-      $municipalityName: validatedDocument.municipalityName,
+      $caseId: validatedCase.caseId,
+      $caseName: validatedCase.caseName,
+      $caseSubject: validatedCase.caseSubject,
+      $companyId: validatedCase.companyId,
+      $companyName: validatedCase.companyName,
+      $workplaceId: validatedCase.workplaceId,
+      $workplaceName: validatedCase.workplaceName,
+      $countyId: validatedCase.countyId,
+      $countyName: validatedCase.countyName,
+      $municipalityId: validatedCase.municipalityId,
+      $municipalityName: validatedCase.municipalityName,
     },
   );
 }
@@ -121,7 +133,7 @@ export async function readDocument(filename: string, id: string): Promise<any> {
   const database = new sqlite3.Database(filename);
   return new Promise((resolve, reject) => {
     database.get(
-      `SELECT * FROM documents WHERE id = $id;`,
+      `SELECT * FROM documents WHERE documentId = $id;`,
       {
         $id: id,
       },

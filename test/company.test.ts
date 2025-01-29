@@ -1,0 +1,15 @@
+import { CompanyIdSchema } from "../src/company";
+
+describe("CompanyIdSchema", () => {
+  it("accepts a valid ID", () => {
+    expect(CompanyIdSchema.parse("1234561234")).toEqual("1234561234");
+  });
+
+  it("strips the dash if present", () => {
+    expect(CompanyIdSchema.parse("123456-1234")).toEqual("1234561234");
+  });
+
+  it("rejects an invalid ID", () => {
+    expect(() => CompanyIdSchema.parse("9183")).toThrow();
+  });
+});
