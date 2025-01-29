@@ -32,6 +32,7 @@ export type DiariumDocumentType =
   | "Avgiftsföreläggande"
   | "Avtal"
   | "Begäran från skyddsombud om ingripande"
+  | "Begäran om/svar på komplettering"
   | "Begäran om avtalsjustering"
   | "Begäran om förlängd svarstid"
   | "Begäran om kompletterande uppgifter"
@@ -185,6 +186,7 @@ export const DiariumDocumentTypeSchema = z.union(
     z.literal("Avgiftsföreläggande"),
     z.literal("Avtal"),
     z.literal("Begäran från skyddsombud om ingripande"),
+    z.literal("Begäran om/svar på komplettering"),
     z.literal("Begäran om avtalsjustering"),
     z.literal("Begäran om förlängd svarstid"),
     z.literal("Begäran om kompletterande uppgifter"),

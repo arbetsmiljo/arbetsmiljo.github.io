@@ -22,7 +22,7 @@ export function generateDateRange(input: string): string[] {
     start = startOfMonth(date);
     end = endOfMonth(date);
   } else {
-    throw new Error("Invalid format. Use YYYY-Www or YYYY-MM.");
+    throw new Error("Invalid format.");
   }
 
   const dates = [];

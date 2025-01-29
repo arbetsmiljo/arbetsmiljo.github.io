@@ -295,7 +295,7 @@ export enum DiariumMunicipality {
 }
 
 export type DiariumMunicipalityName = keyof typeof DiariumMunicipality;
-export type DiariumMunicipalityId = `${DiariumMunicipality}`;
+export type DiariumMunicipalityId = `${DiariumMunicipality}` | "9999";
 
 export const DiariumMunicipalityIdSchema = z.union(
   [
