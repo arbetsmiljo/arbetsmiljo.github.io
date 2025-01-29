@@ -2,8 +2,8 @@
 
 import { Command } from "commander";
 import { readFileSync } from "fs";
-import { createDatabase, readDocument, writeDocument } from "./database";
-import { fetchDiariumDocument } from "./document";
+import { createDatabase, readDocument } from "./database";
+import { fetchDiariumCase } from "./case";
 import { ingestDiariumDay } from "./ingestion";
 import { fetchDiariumPage } from "./pagination";
 import { generateDateRange } from "./time";
@@ -22,11 +22,11 @@ program
   });
 
 program
-  .command("fetchDiariumDocument")
-  .description("Fetch document metadata")
-  .argument("<id>", "Document ID")
+  .command("fetchDiariumCase")
+  .description("Fetch case metadata")
+  .argument("<id>", "Case ID")
   .action(async (id) => {
-    const data = await fetchDiariumDocument(id);
+    const data = await fetchDiariumCase(id);
     process.stdout.write(`${JSON.stringify(data, null, 2)}\n`);
   });
 
@@ -69,15 +69,6 @@ program
   .action(async (id, { filename }) => {
     const document = await readDocument(filename, id);
     console.log(JSON.stringify(document, null, 2));
-  });
-
-program
-  .command("writeDocument")
-  .option("-f, --filename <filename>", "database filename", "db.sqlite")
-  .action(async ({ filename }) => {
-    const input = readFileSync(0, "utf8");
-    const document = JSON.parse(input);
-    await writeDocument(filename, document);
   });
 
 program.parse(process.argv);
