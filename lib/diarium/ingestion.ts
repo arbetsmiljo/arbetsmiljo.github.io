@@ -1,6 +1,6 @@
 import { readDocument, writeDocument } from "./database";
 import { fetchDiariumDocument } from "./document";
-import { fetchDiariumPage } from "./pagination";
+import { DiariumPage, fetchDiariumPage } from "./pagination";
 import ora from "ora-classic";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -11,19 +11,15 @@ export async function ingestDiariumDay(
   ms = 1000,
 ) {
   let pageNumber = 1;
-  let pageSpinner = ora(` Page ${pageNumber}`).start();
-  let page = await fetchDiariumPage(date, pageNumber);
-  pageSpinner.succeed(
-    ` Page ${pageNumber}: ${page.documents.length * (pageNumber - 1)} - ${
-      page.documents.length * (pageNumber - 1) + page.documents.length
-    } of ${page.hitCount}`,
-  );
-  const total = page.hitCount;
-  let remaining = total - page.documents.length;
+  let page: DiariumPage;
 
-  while (remaining > 0 && page.documents.length > 0) {
-    pageNumber += 1;
+  do {
+    let pageSpinner = ora(` Page ${pageNumber}`).start();
     page = await fetchDiariumPage(date, pageNumber);
+    await delay(ms);
+    pageSpinner.succeed(
+      ` Page ${page.number}: ${page.start} - ${page.end} of ${page.total}`,
+    );
 
     for (let i = 0; i < page.documents.length; i++) {
       const { id } = page.documents[i];
@@ -40,5 +36,7 @@ export async function ingestDiariumDay(
         ` ${document.id}: ${document.documentType} ${document.companyName ? `(${document.companyName})` : ""}`,
       );
     }
-  }
+
+    pageNumber += 1;
+  } while (page.end < page.total);
 }

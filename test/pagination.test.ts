@@ -48,12 +48,14 @@ describe("fetchDiariumPage", () => {
 `);
   });
 
-  it("extracts hit count", async () => {
+  it("generates start end and total", async () => {
     (fetch as jest.Mock).mockResolvedValueOnce({
       text: async () =>
         gunzipSync(fs.readFileSync("./test/2025-01-07-p1.html.gz")),
     });
     const page = await fetchDiariumPage("2025-01-07", 1);
-    expect(page.hitCount).toEqual(887);
+    expect(page.start).toEqual(1);
+    expect(page.end).toEqual(10);
+    expect(page.total).toEqual(887);
   });
 });

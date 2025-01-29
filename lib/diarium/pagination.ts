@@ -53,7 +53,10 @@ export type DiariumPaginationDocument = Omit<
 
 export type DiariumPage = {
   documents: DiariumPaginationDocument[];
-  hitCount: number;
+  number: number;
+  total: number;
+  start: number;
+  end: number;
 };
 
 const trim = (text: string | null) =>
@@ -79,7 +82,7 @@ export async function fetchDiariumPage(
   date: string,
   page: number,
 ): Promise<DiariumPage> {
-  const baseUrl = `https://www.av.se/om-oss/diarium-och-allmanna-handlingar/bestall-handlingar/Case/?`;
+  const baseUrl = `https://www.av.se/om-oss/diarium-och-allmanna-handlingar/bestall-handlingar/?`;
   const query = {
     FromDate: date,
     ToDate: date,
@@ -121,11 +124,17 @@ export async function fetchDiariumPage(
   const hitCountElement = document.querySelector("#dd-pagination-result-total");
   if (!hitCountElement) throw new Error("Hit count not found");
   const hitCountText = hitCountElement.textContent!.trim();
-  const hitCount = parseInt(hitCountText);
+  const total = parseInt(hitCountText);
+
+  const start = (page - 1) * 10 + 1;
+  const end = Math.min(page * 10, total);
 
   const diariumPage = {
     documents,
-    hitCount,
+    number: page,
+    total,
+    start,
+    end,
   };
 
   return diariumPage;
