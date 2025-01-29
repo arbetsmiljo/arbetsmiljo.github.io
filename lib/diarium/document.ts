@@ -89,6 +89,7 @@ export type DiariumDocumentType =
   | "Meddelande om att Arbetsmiljöverket godtagit invändningarna"
   | "Meddelande om skyddsombudsstopp"
   | "Missiv till domstol"
+  | "Möjlighet till yttrande"
   | "Mötesanteckningar"
   | "Notifiering"
   | "Omprövningsrapport"
@@ -243,6 +244,7 @@ export const DiariumDocumentTypeSchema = z.union(
     z.literal("Meddelande om att Arbetsmiljöverket godtagit invändningarna"),
     z.literal("Meddelande om skyddsombudsstopp"),
     z.literal("Missiv till domstol"),
+    z.literal("Möjlighet till yttrande"),
     z.literal("Mötesanteckningar"),
     z.literal("Notifiering"),
     z.literal("Omprövningsrapport"),
