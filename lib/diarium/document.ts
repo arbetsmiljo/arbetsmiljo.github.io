@@ -26,6 +26,7 @@ export type DiariumDocumentType =
   | "Ansökan"
   | "Ansökan om att inkassera avgift"
   | "Ansökan om påförande av avgift"
+  | "Ansökan om påförande av sanktionsavgift"
   | "Ansökan om vitesutdömande"
   | "Arbetsmiljöverkets författningssamling"
   | "Avgiftsföreläggande"
@@ -37,6 +38,7 @@ export type DiariumDocumentType =
   | "Begäran om komplettering"
   | "Begäran om yttrande"
   | "Begäran/Förfrågan om uppgifter/synpunkter"
+  | "Begäran/beslut om förlängd svarstid"
   | "Behovsanalys/marknadsanalys"
   | "Bekräftelse/Svar/Uppmaning till uppgiftslämnare"
   | "Beslut"
@@ -177,6 +179,7 @@ export const DiariumDocumentTypeSchema = z.union(
     z.literal("Ansökan"),
     z.literal("Ansökan om att inkassera avgift"),
     z.literal("Ansökan om påförande av avgift"),
+    z.literal("Ansökan om påförande av sanktionsavgift"),
     z.literal("Ansökan om vitesutdömande"),
     z.literal("Arbetsmiljöverkets författningssamling"),
     z.literal("Avgiftsföreläggande"),
@@ -188,6 +191,7 @@ export const DiariumDocumentTypeSchema = z.union(
     z.literal("Begäran om komplettering"),
     z.literal("Begäran om yttrande"),
     z.literal("Begäran/Förfrågan om uppgifter/synpunkter"),
+    z.literal("Begäran/beslut om förlängd svarstid"),
     z.literal("Behovsanalys/marknadsanalys"),
     z.literal("Bekräftelse/Svar/Uppmaning till uppgiftslämnare"),
     z.literal("Beslut"),

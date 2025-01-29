@@ -589,6 +589,7 @@ export const DiariumMunicipalityIdSchema = z.union(
     z.literal("2582"),
     z.literal("2583"),
     z.literal("2584"),
+    z.literal("9999"),
     z.literal("10000"),
   ],
   {

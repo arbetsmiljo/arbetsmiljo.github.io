@@ -2,6 +2,7 @@ import { JSDOM } from "jsdom";
 import _ from "lodash";
 import fetch from "cross-fetch";
 import { type DiariumDocument, DiariumDocumentSchema } from "./document";
+import z from "zod";
 
 export type DiariumPage = {
   documents: DiariumDocument[];
@@ -66,9 +67,23 @@ export async function fetchDiariumPage(
       documentDate,
       documentOrigin,
     };
-    const validatedDocument = DiariumDocumentSchema.parse(
-      unvalidatedDocument,
-    ) as DiariumDocument;
+    let validatedDocument;
+    try {
+      validatedDocument = DiariumDocumentSchema.parse(
+        unvalidatedDocument,
+      ) as DiariumDocument;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        console.error("Validation failed:");
+        error.issues.forEach((issue) => {
+          const path = issue.path.join("");
+          const value = _.get(unvalidatedDocument, path);
+          console.error(issue.message, { path, value });
+          console.error("Unvalidated document:", unvalidatedDocument);
+        });
+      }
+      throw new Error("Invalid case");
+    }
     return validatedDocument;
   });
 

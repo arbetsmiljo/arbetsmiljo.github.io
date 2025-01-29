@@ -163,7 +163,21 @@ export async function fetchDiariumCase(caseId: string): Promise<DiariumCase> {
     municipalityName,
   };
 
-  const validatedCase = DiariumCaseSchema.parse(unvalidatedCase);
+  let validatedCase: DiariumCase;
+  try {
+    validatedCase = DiariumCaseSchema.parse(unvalidatedCase);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      console.error("Validation failed:");
+      error.issues.forEach((issue) => {
+        const path = issue.path.join("");
+        const value = _.get(unvalidatedCase, path);
+        console.error(issue.message, { path, value });
+        console.error("Unvalidated case:", unvalidatedCase);
+      });
+    }
+    throw new Error("Invalid case");
+  }
 
   return validatedCase;
 }
