@@ -6,6 +6,7 @@ import { createDatabase, readDocument, writeDocument } from "./database";
 import { fetchDiariumDocument } from "./document";
 import { ingestDiariumDay } from "./ingestion";
 import { fetchDiariumPage } from "./pagination";
+import { generateDateRange } from "./time";
 
 const pkg = JSON.parse(readFileSync(`${__dirname}/../package.json`, "utf8"));
 
@@ -40,13 +41,25 @@ program
   });
 
 program
-  .command("ingestDiariumDay")
-  .description("Download a day's worth of documents")
-  .argument("<date>", "Day")
+  .command("generateDateRange")
+  .description("List days within a given period")
+  .argument("<period>", "Week or month")
+  .action(async (period) => {
+    const dates = generateDateRange(period);
+    process.stdout.write(`${JSON.stringify(dates, null, 2)}\n`);
+  });
+
+program
+  .command("ingest")
+  .description("Download and store documents for a given period")
+  .argument("<period>", "Period to ingest")
   .option("-f, --filename <filename>", "database filename", "db.sqlite")
   .option("-m, --ms <ms>", "Delay between requests", "1000")
-  .action(async (date, { filename, ms }) => {
-    await ingestDiariumDay(date, filename, parseInt(ms));
+  .action(async (period, { filename, ms }) => {
+    const dates = generateDateRange(period);
+    for (const date of dates) {
+      await ingestDiariumDay(date, filename, parseInt(ms));
+    }
   });
 
 program

@@ -96,6 +96,7 @@ export type DiariumDocumentType =
   | "Påminnelse"
   | "Rapport"
   | "Rapport - utredning, olycksfall, tillbud"
+  | "Registrerad kontroll"
   | "Registrerat besök"
   | "Sammanställning av inkomna externa remissvar"
   | "Skyddsombudets återkallande av begäran"
@@ -116,6 +117,7 @@ export type DiariumDocumentType =
   | "Uppgifter/synpunkter"
   | "Upphandlingsprotokoll (utvärdering)"
   | "Uppsägning av avtal"
+  | "Vidarebefordran av godkänt avgiftsföreläggande"
   | "Vidarebefordran till annan aktör"
   | "Yttrande"
   | "Återtagande av ansökan"
@@ -575,6 +577,7 @@ export const DiariumDocumentSchema = z.object({
     z.literal("Påminnelse"),
     z.literal("Rapport"),
     z.literal("Rapport - utredning, olycksfall, tillbud"),
+    z.literal("Registrerad kontroll"),
     z.literal("Registrerat besök"),
     z.literal("Sammanställning av inkomna externa remissvar"),
     z.literal("Skyddsombudets återkallande av begäran"),
@@ -597,6 +600,7 @@ export const DiariumDocumentSchema = z.object({
     z.literal("Uppgifter/synpunkter"),
     z.literal("Upphandlingsprotokoll (utvärdering)"),
     z.literal("Uppsägning av avtal"),
+    z.literal("Vidarebefordran av godkänt avgiftsföreläggande"),
     z.literal("Vidarebefordran till annan aktör"),
     z.literal("Yttrande"),
     z.literal("Återtagande av ansökan"),

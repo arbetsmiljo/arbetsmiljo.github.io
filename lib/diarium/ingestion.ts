@@ -14,23 +14,23 @@ export async function ingestDiariumDay(
   let page: DiariumPage;
 
   do {
-    let pageSpinner = ora(` Page ${pageNumber}`).start();
+    let pageSpinner = ora(` ${date} page ${pageNumber}`).start();
     page = await fetchDiariumPage(date, pageNumber);
     await delay(ms);
     pageSpinner.succeed(
-      ` Page ${page.number}: ${page.start} - ${page.end} of ${page.total}`,
+      ` ${date} page ${page.number}: ${page.start} - ${page.end} of ${page.total}`,
     );
 
     for (let i = 0; i < page.documents.length; i++) {
       const { id } = page.documents[i];
       const documentSpinner = ora(` ${id}`).start();
-      await delay(ms);
-      const document = await fetchDiariumDocument(id);
       const existingDocument = await readDocument(filename, id);
       if (existingDocument) {
-        documentSpinner.warn(` ${document.id}: Already exists`);
+        documentSpinner.warn(` ${id}: Already exists`);
         continue;
       }
+      await delay(ms);
+      const document = await fetchDiariumDocument(id);
       await writeDocument(filename, document);
       documentSpinner.succeed(
         ` ${document.id}: ${document.documentType} ${document.companyName ? `(${document.companyName})` : ""}`,
