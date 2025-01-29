@@ -11,7 +11,9 @@ import {
 export function generateDateRange(input: string): string[] {
   let start, end;
 
-  if (/^\d{4}-W\d{2}$/.test(input)) {
+  if (/^\d{4}-\d{2}-\d{2}$/.test(input)) {
+    return [input];
+  } else if (/^\d{4}-W\d{2}$/.test(input)) {
     const date = parseISO(input);
     start = startOfISOWeek(date);
     end = endOfISOWeek(date);
