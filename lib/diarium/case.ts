@@ -20,6 +20,11 @@ import {
   DiariumMunicipalityNameSchema,
 } from "./municipality";
 
+/**
+ * Data model for case metadata
+ *
+ * Most of this is optional because tons of csases lack most of these fields.
+ */
 export type DiariumCase = {
   caseId: string;
   caseName: string;
@@ -34,11 +39,25 @@ export type DiariumCase = {
   municipalityName?: DiariumMunicipalityName;
 };
 
+/**
+ * Case IDs have a strict pattern. A valid example is 1234/123456.
+ * Arbetsmiljöverket's data quality is high in the case of this property and
+ * I've never observed a single case of this pattern being violated.
+ */
 export const DiariumCaseIdSchema = z.string().regex(/^\d{4}\/\d{6}$/, {
   message: "Invalid format, expected YYYY/000000",
 });
 
+/**
+ * Case names can be any string value.
+ */
 export const DiariumCaseNameSchema = z.string();
+
+/**
+ * Case subjects seem to be some kind of enum but I haven't gotten around to
+ * listing them and setting up validation here yet so any string value is
+ * accepted.
+ */
 export const DiariumCaseSubjectSchema = z.string();
 
 export const DiariumCaseSchema = z.object({

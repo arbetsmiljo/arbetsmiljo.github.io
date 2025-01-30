@@ -12,7 +12,7 @@ import z from "zod";
  * there can be a typo or invalid data here. So here are the list of exceptions
  * that have been allowed for here:
  *
- * 1. An extra number – 4445551234 – presumably a typo.
+ * 1. An extra number – 44455512349 – presumably a typo.
  * 2. VAT numbers instead of actual company IDs. So e.g. "012345678901".
  * 3. Somebody's name, i.e. "PatrikVernersson"
  */
@@ -33,4 +33,9 @@ export const CompanyIdSchema = z
     return val;
   });
 
+/**
+ * Any string value is valid as a company name. Most of them end with ` AB` but
+ * I haven't bothered to check if it's 100%. Doesn't seem important to lock this
+ * down.
+ */
 export const CompanyNameSchema = z.string();

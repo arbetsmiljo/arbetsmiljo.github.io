@@ -1,7 +1,30 @@
 import z from "zod";
 
+/**
+ * | Origin     | Translation | Description |
+ * |------------|-------------|-------------|
+ * | Inkommande | Incoming    | Documents received by Arbetsmiljöverket from the outside world. |
+ * | Upprättad  | Created     | |
+ * | Utgående   | Outgoing    | Documents originating with Arbetsmiljöverket and sent by them to a third party. |
+ */
 export type DiariumDocumentOrigin = "Inkommande" | "Upprättad" | "Utgående";
 
+/**
+ * Document types are quite an important field. They're the closest you can get
+ * to some kind of sense of what the filing contains without actually requesting
+ * a copy of the document itself from Arbetsmiljöverket.
+ *
+ * This is a _semi-standardised_ field. I'm actually not sure if handläggarna at
+ * Arbetsmiljöverket type this value in freeform by hand for each document or if
+ * they choose it from a dropdown.
+ *
+ * - If they're typing it in freehand every time I don't understand why the data
+ *   quality can be as high as it is. I've yet to see a typo in this field for
+ *   example.
+ * - If they're choosing it from a dropdown every time I don't understand why the
+ *   data quality isn't better. For example, why do both
+ *   `Beslut om att ärende avslutas (avslutsbrev)` and `Avslutsbrev` exist?
+ */
 export type DiariumDocumentType =
   | "Anbud (vinnande)"
   | "Anbud (övriga)"

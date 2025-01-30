@@ -1,5 +1,9 @@
 import z from "zod";
 
+/**
+ * Sweden's 21 real counties plus a "FIKTIV" county with ID "99" which is
+ * primarily used for cases associated with locations beyond Sweden's borders.
+ */
 export enum DiariumCounty {
   "STOCKHOLMS LÄN" = "01",
   "UPPSALA LÄN" = "03",
@@ -25,7 +29,16 @@ export enum DiariumCounty {
   "FIKTIV" = "99",
 }
 
+/**
+ * County names are very fixed and Arbetsmiljöverket's data quality is high for
+ * this field so it's possible to be quite strict.
+ */
 export type DiariumCountyName = keyof typeof DiariumCounty;
+
+/**
+ * County IDs are also very fixed and Arbetsmiljöverket's data quality is
+ * equally high for this field so it's possible to be strict here too.
+ */
 export type DiariumCountyId = `${DiariumCounty}`;
 
 export const DiariumCountyIdSchema = z.union(
