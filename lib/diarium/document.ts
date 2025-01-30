@@ -30,6 +30,7 @@ export type DiariumDocumentType =
   | "Ansökan om vitesutdömande"
   | "Arbetsmiljöverkets författningssamling"
   | "Avgiftsföreläggande"
+  | "Avslutsbrev"
   | "Avtal"
   | "Begäran från skyddsombud om ingripande"
   | "Begäran om/svar på komplettering"
@@ -66,6 +67,7 @@ export type DiariumDocumentType =
   | "Faktaunderlag"
   | "Frågor från anbudsgivare och information till anbudsgivare"
   | "Föranmälan"
+  | "Föreskriftsförslag"
   | "Föreskriftsförslag Externt"
   | "Föreskriftsförslag Internt"
   | "Förfrågan/Information om inträffad arbetsolycka"
@@ -86,6 +88,7 @@ export type DiariumDocumentType =
   | "Komplettering"
   | "Konsekvensutredning/beslut om att ingen behövs"
   | "Kvittens"
+  | "Kvittens/bekräftelse"
   | "Meddelande om att Arbetsmiljöverket godtagit invändningarna"
   | "Meddelande om skyddsombudsstopp"
   | "Missiv till domstol"
@@ -103,6 +106,7 @@ export type DiariumDocumentType =
   | "Skyddsombudets återkallande av begäran"
   | "Svar på avgiftsföreläggande"
   | "Svar på kravskrivelse"
+  | "Svar/synpunkter på föreskriftsförslag"
   | "Svar/synpunkter på föreskriftsförslag Externt"
   | "Svar/synpunkter på föreskriftsförslag Internt"
   | "Tilldelningsbeslut"
@@ -185,6 +189,7 @@ export const DiariumDocumentTypeSchema = z.union(
     z.literal("Ansökan om vitesutdömande"),
     z.literal("Arbetsmiljöverkets författningssamling"),
     z.literal("Avgiftsföreläggande"),
+    z.literal("Avslutsbrev"),
     z.literal("Avtal"),
     z.literal("Begäran från skyddsombud om ingripande"),
     z.literal("Begäran om/svar på komplettering"),
@@ -221,6 +226,7 @@ export const DiariumDocumentTypeSchema = z.union(
     z.literal("Faktaunderlag"),
     z.literal("Frågor från anbudsgivare och information till anbudsgivare"),
     z.literal("Föranmälan"),
+    z.literal("Föreskriftsförslag"),
     z.literal("Föreskriftsförslag Externt"),
     z.literal("Föreskriftsförslag Internt"),
     z.literal("Förfrågan/Information om inträffad arbetsolycka"),
@@ -241,6 +247,7 @@ export const DiariumDocumentTypeSchema = z.union(
     z.literal("Komplettering"),
     z.literal("Konsekvensutredning/beslut om att ingen behövs"),
     z.literal("Kvittens"),
+    z.literal("Kvittens/bekräftelse"),
     z.literal("Meddelande om att Arbetsmiljöverket godtagit invändningarna"),
     z.literal("Meddelande om skyddsombudsstopp"),
     z.literal("Missiv till domstol"),
@@ -258,6 +265,7 @@ export const DiariumDocumentTypeSchema = z.union(
     z.literal("Skyddsombudets återkallande av begäran"),
     z.literal("Svar på avgiftsföreläggande"),
     z.literal("Svar på kravskrivelse"),
+    z.literal("Svar/synpunkter på föreskriftsförslag"),
     z.literal("Svar/synpunkter på föreskriftsförslag Externt"),
     z.literal("Svar/synpunkter på föreskriftsförslag Internt"),
     z.literal("Tilldelningsbeslut"),

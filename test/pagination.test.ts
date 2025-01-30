@@ -86,6 +86,6 @@ describe("fetchDiariumPage", () => {
     const page = await fetchDiariumPage("2025-01-07", 1);
     expect(page.start).toEqual(1);
     expect(page.end).toEqual(10);
-    expect(page.total).toEqual(887);
+    expect(page.total).toEqual(888);
   });
 });

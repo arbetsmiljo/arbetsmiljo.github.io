@@ -295,6 +295,11 @@ export enum DiariumMunicipality {
 }
 
 export type DiariumMunicipalityName = keyof typeof DiariumMunicipality;
+
+/**
+ * An extra "9999" is added here because Arbetsmiljöverket sometimes use
+ * that for "Ej svensk hemortskommun" instead of "10000".
+ */
 export type DiariumMunicipalityId = `${DiariumMunicipality}` | "9999";
 
 export const DiariumMunicipalityIdSchema = z.union(

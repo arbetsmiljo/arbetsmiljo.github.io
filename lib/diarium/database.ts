@@ -147,3 +147,28 @@ export async function readDocument(filename: string, id: string): Promise<any> {
     );
   });
 }
+
+export async function countDocuments(
+  filename: string,
+  documentDate: string,
+): Promise<number> {
+  if (!fs.existsSync(filename)) {
+    throw new Error(`Database file not found: ${filename}`);
+  }
+  const database = new sqlite3.Database(filename);
+  return new Promise((resolve, reject) => {
+    database.get(
+      `SELECT COUNT(*) as documentCount FROM documents WHERE documentDate = $documentDate;`,
+      {
+        $documentDate: documentDate,
+      },
+      (error, row) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(parseInt((row as any).documentCount));
+        }
+      },
+    );
+  });
+}

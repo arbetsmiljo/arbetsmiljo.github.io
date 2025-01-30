@@ -3,20 +3,32 @@ import z from "zod";
 /**
  * This validates quite loosely. Normally a Swedish company ID has to be 10
  * characters, with an optional hyphen separator between characters 6 and 7.
- * In practice Arbetsmiljöverket's data isn't this reliable and sometimes
- * there can be a typo. So here are the list of exceptions that have been
- * allowed for here:
+ * So valid examples would be like so:
  *
- * 1. An extra number.
+ * 1. 555666-1234
+ * 2. 4445551234
+ *
+ * In practice Arbetsmiljöverket's data isn't this reliable and sometimes
+ * there can be a typo or invalid data here. So here are the list of exceptions
+ * that have been allowed for here:
+ *
+ * 1. An extra number – 4445551234 – presumably a typo.
+ * 2. VAT numbers instead of actual company IDs. So e.g. "012345678901".
+ * 3. Somebody's name, i.e. "PatrikVernersson"
  */
 export const CompanyIdSchema = z
   .string()
-  .regex(/^\d{6}-?\d{4}\d?$/, {
+  .regex(/^(\d{6}(-|)?\d{4}\d?|\d{12}|PatrikVernersson)$/, {
     message: "Invalid format, expected 123456-1234",
   })
   .transform((val) => {
-    if (val && val.includes("-")) {
-      return val.split("-").join("");
+    if (val) {
+      if (val.includes("-")) {
+        return val.split("-").join("");
+      }
+      if (val.includes("")) {
+        return val.split("").join("");
+      }
     }
     return val;
   });

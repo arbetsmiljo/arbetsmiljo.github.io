@@ -1,4 +1,4 @@
-import { readDocument, writeDocument } from "./database";
+import { countDocuments, readDocument, writeDocument } from "./database";
 import { fetchDiariumCase } from "./case";
 import { DiariumPage, fetchDiariumPage } from "./pagination";
 import ora from "ora-classic";
@@ -12,11 +12,16 @@ export async function ingestDiariumDay(
 ) {
   let pageNumber = 1;
   let page: DiariumPage;
+  const documentCount = await countDocuments(filename, date);
 
   do {
     let pageSpinner = ora(` ${date} page ${pageNumber}`).start();
     page = await fetchDiariumPage(date, pageNumber);
     await delay(ms);
+    if (documentCount >= page.total) {
+      pageSpinner.warn(` ${date} ✅`);
+      return;
+    }
     pageSpinner.succeed(
       ` ${date} page ${page.number}: ${page.start} - ${page.end} of ${page.total}`,
     );
