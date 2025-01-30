@@ -168,6 +168,11 @@ export const DiariumDocumentIdSchema = z.string().regex(/^\d{4}\/\d{6}-\d+$/, {
   message: "Invalid document ID, expected YYYY/000000-1",
 });
 
+/**
+ * These get validated as YYYY-MM-DD. This is mainly here just as a coherence
+ * check on the scraper logic as a whole. If something different randomly ends
+ * up falling into this field it's good for it to error.
+ */
 export const DiariumDocumentDateSchema = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}$/, {
