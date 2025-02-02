@@ -81,6 +81,7 @@ export type DiariumDocumentType =
   | "Beslut om prövningstillstånd"
   | "Beslut om slutligt omedelbart förbud"
   | "Beslut om tillfälligt omedelbart förbud"
+  | "Beslut om upphävande av förbud"
   | "Beslut om upphävande av tillfälligt förbud"
   | "Beslut om ändring"
   | "Beslut rörande begäran om förlängd svarstid"
@@ -245,6 +246,7 @@ export const DiariumDocumentTypeSchema = z.union(
     z.literal("Beslut om prövningstillstånd"),
     z.literal("Beslut om slutligt omedelbart förbud"),
     z.literal("Beslut om tillfälligt omedelbart förbud"),
+    z.literal("Beslut om upphävande av förbud"),
     z.literal("Beslut om upphävande av tillfälligt förbud"),
     z.literal("Beslut om ändring"),
     z.literal("Beslut rörande begäran om förlängd svarstid"),
