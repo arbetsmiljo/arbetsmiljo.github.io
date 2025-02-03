@@ -90,7 +90,7 @@ export async function fetchDiariumPage(
   const hitCountElement = document.querySelector("#dd-pagination-result-total");
   if (!hitCountElement) throw new Error("Hit count not found");
   const hitCountText = hitCountElement.textContent!.trim();
-  const total = parseInt(hitCountText);
+  const total = parseInt(hitCountText.split(" ").join(""));
 
   const start = (page - 1) * 10 + 1;
   const end = Math.min(page * 10, total);
