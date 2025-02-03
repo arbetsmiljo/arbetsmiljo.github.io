@@ -1,18 +1,24 @@
-import { countDocuments, readDocument, writeDocument } from "./database";
+import {
+  countDocuments,
+  DiariumDatabase,
+  readDocument,
+  writeDocument,
+} from "./database";
 import { fetchDiariumCase } from "./case";
 import { DiariumPage, fetchDiariumPage } from "./pagination";
 import ora from "ora-classic";
+import { Kysely } from "kysely";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export async function ingestDiariumDay(
+  db: Kysely<DiariumDatabase>,
   date: string,
-  filename: string,
   ms = 1000,
 ) {
   let pageNumber = 1;
   let page: DiariumPage;
-  const documentCount = await countDocuments(filename, date);
+  const documentCount = await countDocuments(db, date);
 
   do {
     let pageSpinner = ora(` ${date} page ${pageNumber}`).start();
@@ -30,14 +36,14 @@ export async function ingestDiariumDay(
       const diariumDocument = page.documents[i];
       const { documentId } = diariumDocument;
       const documentSpinner = ora(` ${documentId}`).start();
-      const existingDocument = await readDocument(filename, documentId);
+      const existingDocument = await readDocument(db, documentId);
       if (existingDocument) {
         documentSpinner.warn(` ${documentId}: Already exists`);
         continue;
       }
       await delay(ms);
       const diariumCase = await fetchDiariumCase(documentId.split("-")[0]);
-      await writeDocument(filename, diariumDocument, diariumCase);
+      await writeDocument(db, diariumDocument, diariumCase);
       documentSpinner.succeed(
         ` ${diariumDocument.documentId}: ${diariumDocument.documentType} ${diariumCase.companyName ? `(${diariumCase.companyName})` : ""}`,
       );

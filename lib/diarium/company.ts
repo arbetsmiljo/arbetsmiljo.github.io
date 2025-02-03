@@ -14,11 +14,12 @@ import z from "zod";
  *
  * 1. An extra number – 44455512349 – presumably a typo.
  * 2. VAT numbers instead of actual company IDs. So e.g. "012345678901".
- * 3. Somebody's name, i.e. "PatrikVernersson"
+ * 3. Somebody's name, i.e. "PatrikVernersson".
+ * 4. The number "2" on its own (2024/016058-1).
  */
 export const CompanyIdSchema = z
   .string()
-  .regex(/^(\d{6}(-|)?\d{4}\d?|\d{12}|PatrikVernersson)$/, {
+  .regex(/^(\d{6}(-|)?\d{4}\d?|\d{12}|PatrikVernersson|2)$/, {
     message: "Invalid format, expected 123456-1234",
   })
   .transform((val) => {

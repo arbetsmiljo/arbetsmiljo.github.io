@@ -2,7 +2,7 @@
 
 import { Command } from "commander";
 import { readFileSync } from "fs";
-import { createDatabase, readDocument } from "./database";
+import { initKysely, createDatabase, readDocument } from "./database";
 import { fetchDiariumCase } from "./case";
 import { ingestDiariumDay } from "./ingestion";
 import { fetchDiariumPage } from "./pagination";
@@ -18,7 +18,8 @@ program
   .description("Create a new blank database")
   .option("-f, --filename <filename>", "database filename", "db.sqlite")
   .action(async ({ filename }) => {
-    await createDatabase(filename);
+    const db = initKysely(filename);
+    await createDatabase(db);
   });
 
 program
@@ -56,9 +57,10 @@ program
   .option("-f, --filename <filename>", "database filename", "db.sqlite")
   .option("-m, --ms <ms>", "Delay between requests", "1000")
   .action(async (period, { filename, ms }) => {
+    const db = initKysely(filename);
     const dates = generateDateRange(period);
     for (const date of dates) {
-      await ingestDiariumDay(date, filename, parseInt(ms));
+      await ingestDiariumDay(db, date, parseInt(ms));
     }
   });
 
@@ -67,7 +69,8 @@ program
   .option("-f, --filename <filename>", "database filename", "db.sqlite")
   .argument("<id>", "Document ID")
   .action(async (id, { filename }) => {
-    const document = await readDocument(filename, id);
+    const db = initKysely(filename);
+    const document = await readDocument(db, id);
     console.log(JSON.stringify(document, null, 2));
   });
 

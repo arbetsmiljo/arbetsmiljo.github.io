@@ -1,59 +1,58 @@
-import sqlite3 from "sqlite3";
-import fs from "fs";
+import Database from "better-sqlite3";
+import { Generated, Kysely, SqliteDialect, sql } from "kysely";
 import { type DiariumCase, DiariumCaseSchema } from "./case";
 import { type DiariumDocument, DiariumDocumentSchema } from "./document";
-import z from "zod";
 
-export type DatabaseDocument = DiariumDocument & {
-  created: Date;
-};
+type DiariumDocumentsTable = DiariumDocument &
+  DiariumCase & {
+    created: Generated<Date>;
+  };
 
-const DatabaseDocumentSchema = DiariumDocumentSchema.extend({
-  created: z.preprocess(
-    (arg) => (typeof arg == "string" ? new Date(arg) : undefined),
-    z.date(),
-  ),
-});
+export interface DiariumDatabase {
+  documents: DiariumDocumentsTable;
+}
+
+export function initKysely(filename: string): Kysely<DiariumDatabase> {
+  const database = new Database(filename);
+  const dialect = new SqliteDialect({ database });
+  const db = new Kysely<DiariumDatabase>({ dialect });
+  return db;
+}
 
 /**
  * Creates a new blank database
  */
-export async function createDatabase(filename: string): Promise<void> {
-  if (fs.existsSync(filename)) {
-    throw new Error(`Database file already exists: ${filename}`);
-  }
-  const database = new sqlite3.Database(filename);
-  database.exec(`
-    CREATE TABLE documents (
-      documentId TEXT PRIMARY KEY NOT NULL,
-      documentDate TEXT NOT NULL,
-      documentOrigin TEXT NOT NULL,
-      documentType TEXT NOT NULL,
-      caseId TEXT NOT NULL,
-      caseName TEXT NOT NULL,
-      caseSubject TEXT NOT NULL,
-      companyId TEXT,
-      companyName TEXT,
-      workplaceId TEXT,
-      workplaceName TEXT,
-      countyId TEXT,
-      countyName TEXT,
-      municipalityId TEXT,
-      municipalityName TEXT,
-      created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
-`);
+export async function createDatabase(
+  db: Kysely<DiariumDatabase>,
+): Promise<void> {
+  await db.schema
+    .createTable("documents")
+    .addColumn("documentId", "text", (col) => col.primaryKey().notNull())
+    .addColumn("documentDate", "text", (col) => col.notNull())
+    .addColumn("documentOrigin", "text", (col) => col.notNull())
+    .addColumn("documentType", "text", (col) => col.notNull())
+    .addColumn("caseId", "text", (col) => col.notNull())
+    .addColumn("caseName", "text", (col) => col.notNull())
+    .addColumn("caseSubject", "text", (col) => col.notNull())
+    .addColumn("companyId", "text")
+    .addColumn("companyName", "text")
+    .addColumn("workplaceId", "text")
+    .addColumn("workplaceName", "text")
+    .addColumn("countyId", "text")
+    .addColumn("countyName", "text")
+    .addColumn("municipalityId", "text")
+    .addColumn("municipalityName", "text")
+    .addColumn("created", "timestamp", (col) =>
+      col.defaultTo(sql`CURRENT_TIMESTAMP`),
+    )
+    .execute();
 }
 
 export async function writeDocument(
-  filename: string,
+  db: Kysely<DiariumDatabase>,
   diariumDocument: object,
   diariumCase: object,
 ): Promise<void> {
-  if (!fs.existsSync(filename)) {
-    throw new Error(`Database file not found: ${filename}`);
-  }
-
   let validatedDocument: DiariumDocument;
   try {
     validatedDocument = DiariumDocumentSchema.parse(diariumDocument);
@@ -70,105 +69,48 @@ export async function writeDocument(
     throw new Error(`Invalid case: ${error}`);
   }
 
-  const database = new sqlite3.Database(filename);
-  database.run(
-    `
-    INSERT INTO documents (
-      documentId,
-      documentDate,
-      documentOrigin,
-      documentType,
-      caseId,
-      caseName,
-      caseSubject,
-      companyId,
-      companyName,
-      workplaceId,
-      workplaceName,
-      countyId,
-      countyName,
-      municipalityId,
-      municipalityName
-    ) VALUES (
-      $documentId,
-      $documentDate,
-      $documentOrigin,
-      $documentType,
-      $caseId,
-      $caseName,
-      $caseSubject,
-      $companyId,
-      $companyName,
-      $workplaceId,
-      $workplaceName,
-      $countyId,
-      $countyName,
-      $municipalityId,
-      $municipalityName
-    );`,
-    {
-      $documentId: validatedDocument.documentId,
-      $documentDate: validatedDocument.documentDate,
-      $documentOrigin: validatedDocument.documentOrigin,
-      $documentType: validatedDocument.documentType,
-      $caseId: validatedCase.caseId,
-      $caseName: validatedCase.caseName,
-      $caseSubject: validatedCase.caseSubject,
-      $companyId: validatedCase.companyId,
-      $companyName: validatedCase.companyName,
-      $workplaceId: validatedCase.workplaceId,
-      $workplaceName: validatedCase.workplaceName,
-      $countyId: validatedCase.countyId,
-      $countyName: validatedCase.countyName,
-      $municipalityId: validatedCase.municipalityId,
-      $municipalityName: validatedCase.municipalityName,
-    },
-  );
+  await db
+    .insertInto("documents")
+    .values({
+      documentId: validatedDocument.documentId,
+      documentDate: validatedDocument.documentDate,
+      documentOrigin: validatedDocument.documentOrigin,
+      documentType: validatedDocument.documentType,
+      caseId: validatedCase.caseId,
+      caseName: validatedCase.caseName,
+      caseSubject: validatedCase.caseSubject,
+      companyId: validatedCase.companyId,
+      companyName: validatedCase.companyName,
+      workplaceId: validatedCase.workplaceId,
+      workplaceName: validatedCase.workplaceName,
+      countyId: validatedCase.countyId,
+      countyName: validatedCase.countyName,
+      municipalityId: validatedCase.municipalityId,
+      municipalityName: validatedCase.municipalityName,
+    })
+    .execute();
 }
 
-export async function readDocument(filename: string, id: string): Promise<any> {
-  if (!fs.existsSync(filename)) {
-    throw new Error(`Database file not found: ${filename}`);
-  }
-  const database = new sqlite3.Database(filename);
-  return new Promise((resolve, reject) => {
-    database.get(
-      `SELECT * FROM documents WHERE documentId = $id;`,
-      {
-        $id: id,
-      },
-      (error, row) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(row);
-        }
-      },
-    );
-  });
+export async function readDocument(
+  db: Kysely<DiariumDatabase>,
+  id: string,
+): Promise<any> {
+  const document = await db
+    .selectFrom("documents")
+    .selectAll()
+    .where("documentId", "=", id)
+    .executeTakeFirst();
+  return document;
 }
 
 export async function countDocuments(
-  filename: string,
+  db: Kysely<DiariumDatabase>,
   documentDate: string,
 ): Promise<number> {
-  if (!fs.existsSync(filename)) {
-    throw new Error(`Database file not found: ${filename}`);
-  }
-  const database = new sqlite3.Database(filename);
-  return new Promise((resolve, reject) => {
-    database.get(
-      `SELECT COUNT(*) as documentCount FROM documents WHERE documentDate = $documentDate;`,
-      {
-        $documentDate: documentDate,
-      },
-      (error, row) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(parseInt((row as any).documentCount));
-        }
-      },
-    );
-  });
+  const result = await db
+    .selectFrom("documents")
+    .select(db.fn.count("documentId").as("documentCount"))
+    .where("documentDate", "=", documentDate)
+    .executeTakeFirst();
+  return result?.documentCount ? Number(result.documentCount) : 0;
 }
