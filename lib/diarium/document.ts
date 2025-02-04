@@ -127,6 +127,7 @@ export type DiariumDocumentType =
   | "Registrerad kontroll"
   | "Registrerat besök"
   | "Sammanställning av inkomna externa remissvar"
+  | "Sammanställning av inkomna remissvar"
   | "Skyddsombudets återkallande av begäran"
   | "Svar på avgiftsföreläggande"
   | "Svar på kravskrivelse"
@@ -292,6 +293,7 @@ export const DiariumDocumentTypeSchema = z.union(
     z.literal("Registrerad kontroll"),
     z.literal("Registrerat besök"),
     z.literal("Sammanställning av inkomna externa remissvar"),
+    z.literal("Sammanställning av inkomna remissvar"),
     z.literal("Skyddsombudets återkallande av begäran"),
     z.literal("Svar på avgiftsföreläggande"),
     z.literal("Svar på kravskrivelse"),

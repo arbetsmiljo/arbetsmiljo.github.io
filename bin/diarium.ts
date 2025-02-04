@@ -7,6 +7,10 @@ import { fetchDiariumCase } from "./case";
 import { ingestDiariumDay } from "./ingestion";
 import { fetchDiariumPage } from "./pagination";
 import { generateDateRange } from "./time";
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const pkg = JSON.parse(readFileSync(`${__dirname}/../package.json`, "utf8"));
 
