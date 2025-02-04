@@ -16,12 +16,17 @@ import z from "zod";
  * 2. VAT numbers instead of actual company IDs. So e.g. "012345678901".
  * 3. Somebody's name, i.e. "PatrikVernersson".
  * 4. The number "2" on its own (2024/016058-1).
+ * 5. "UlfBemler" (2024/033802-1).
+ * 6. "24838560" (2024/038886-1).
  */
 export const CompanyIdSchema = z
   .string()
-  .regex(/^(\d{6}(-|)?\d{4}\d?|\d{12}|PatrikVernersson|2)$/, {
-    message: "Invalid format, expected 123456-1234",
-  })
+  .regex(
+    /^(\d{6}(-|)?\d{4}\d?|\d{12}|PatrikVernersson|2|UlfBemler|24838560)$/,
+    {
+      message: "Invalid format, expected 123456-1234",
+    },
+  )
   .transform((val) => {
     if (val) {
       if (val.includes("-")) {
