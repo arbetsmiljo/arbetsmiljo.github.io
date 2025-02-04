@@ -121,6 +121,8 @@ export type DiariumDocumentType =
   | "Notifiering"
   | "Omprövningsrapport"
   | "Parallelluppställning"
+  | "Projektdirektiv föreskriftsarbete"
+  | "Provningsrapport/faktaunderlag"
   | "Påminnelse"
   | "Rapport"
   | "Rapport - utredning, olycksfall, tillbud"
@@ -287,6 +289,8 @@ export const DiariumDocumentTypeSchema = z.union(
     z.literal("Notifiering"),
     z.literal("Omprövningsrapport"),
     z.literal("Parallelluppställning"),
+    z.literal("Projektdirektiv föreskriftsarbete"),
+    z.literal("Provningsrapport/faktaunderlag"),
     z.literal("Påminnelse"),
     z.literal("Rapport"),
     z.literal("Rapport - utredning, olycksfall, tillbud"),
