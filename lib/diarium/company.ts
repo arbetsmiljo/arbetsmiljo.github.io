@@ -19,12 +19,12 @@ import z from "zod";
  * 5. "UlfBemler" (2024/033802-1).
  * 6. "24838560" (2024/038886-1).
  * 7. "769079941" (2024/058952-1).
-
+ * 8. "556417" (2024/060133-1).
  */
 export const CompanyIdSchema = z
   .string()
   .regex(
-    /^(\d{6}(-|)?\d{4}\d?|\d{12}|PatrikVernersson|2|UlfBemler|24838560|769079941)$/,
+    /^(\d{6}(-|)?\d{4}\d?|\d{12}|PatrikVernersson|2|UlfBemler|24838560|769079941|556417)$/,
     {
       message: "Invalid format, expected 123456-1234",
     },
