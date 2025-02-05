@@ -63,6 +63,7 @@ program
   .action(async (period, { filename, ms }) => {
     const db = initKysely(filename);
     const dates = generateDateRange(period);
+    dates.reverse();
     for (const date of dates) {
       await ingestDiariumDay(db, date, parseInt(ms));
     }

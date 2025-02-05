@@ -52,6 +52,7 @@ export type DiariumDocumentType =
   | "Ansökan om påförande av sanktionsavgift"
   | "Ansökan om vitesutdömande"
   | "Arbetsmiljöverkets författningssamling"
+  | "Arbetsmiljöverkets överklagande"
   | "Avgiftsföreläggande"
   | "Avslutsbrev"
   | "Avtal"
@@ -220,6 +221,7 @@ export const DiariumDocumentTypeSchema = z.union(
     z.literal("Ansökan om påförande av sanktionsavgift"),
     z.literal("Ansökan om vitesutdömande"),
     z.literal("Arbetsmiljöverkets författningssamling"),
+    z.literal("Arbetsmiljöverkets överklagande"),
     z.literal("Avgiftsföreläggande"),
     z.literal("Avslutsbrev"),
     z.literal("Avtal"),
