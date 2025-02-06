@@ -12,7 +12,9 @@ import {
   DescriptionDetails,
 } from "@arbetsmarknad/components/DescriptionList";
 import { Container } from "@arbetsmarknad/components/Container";
+import { Footer } from "@arbetsmarknad/components/Footer";
 import { HeaderMenu } from "@arbetsmarknad/components/HeaderMenu";
+import { Main } from "@arbetsmarknad/components/Main";
 import { Page } from "@arbetsmarknad/components/Page";
 import { Section } from "@arbetsmarknad/components/Section";
 import { SectionHeading } from "@arbetsmarknad/components/SectionHeading";
@@ -27,22 +29,20 @@ export default function Home() {
         href="https://arbetsmiljo.github.io"
         text="arbetsmiljo.github.io"
       />
-      <Breadcrumb className="py-4 w-full flex justify-center">
-        <Container>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="https://arbetsmarknad.github.io">
-                Arbetsmarknad
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Arbetsmiljö</BreadcrumbLink>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Container>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="https://arbetsmarknad.github.io">
+              Arbetsmarknad
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Arbetsmiljö</BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
       </Breadcrumb>
-      <main className="flex flex-col items-center w-full py-4">
+      <Main>
         <Container className="flex flex-col items-start space-y-4">
           <TopLevelHeading text="Arbetsmiljödata och -statistik" />
           <p></p>
@@ -65,7 +65,13 @@ export default function Home() {
             </DescriptionList>
           </Section>
         </Container>
-      </main>
+      </Main>
+      <Footer
+        sourceCode={[
+          "arbetsmiljo/arbetsmiljo.github.io",
+          "arbetsmarknad/components",
+        ]}
+      />
     </Page>
   );
 }
