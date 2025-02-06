@@ -18,7 +18,7 @@ import { Section } from "@arbetsmarknad/components/Section";
 import { SectionHeading } from "@arbetsmarknad/components/SectionHeading";
 import { TopLevelHeading } from "@arbetsmarknad/components/TopLevelHeading";
 
-const yearsWithData = ["2024", "2023"];
+const yearsWithData = ["2025", "2024", "2023", "2022"];
 
 export default function Home() {
   return (
