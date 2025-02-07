@@ -1,3 +1,6 @@
+import { Footer } from "@arbetsmarknad/components/Footer";
+import { HeaderMenu } from "@arbetsmarknad/components/HeaderMenu";
+import { Page } from "@arbetsmarknad/components/Page";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -27,7 +30,19 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <Page>
+          <HeaderMenu
+            href="https://arbetsmiljo.github.io"
+            text="arbetsmiljo.github.io"
+          />
+          {children}
+          <Footer
+            sourceCode={[
+              "arbetsmiljo/arbetsmiljo.github.io",
+              "arbetsmarknad/components",
+            ]}
+          />
+        </Page>
       </body>
     </html>
   );
