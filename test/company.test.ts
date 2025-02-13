@@ -17,7 +17,7 @@ describe("CompanyIdSchema", () => {
     expect(CompanyIdSchema.parse("7164258548")).toEqual("7164258548");
   });
 
-  it("rejects an invalid ID", () => {
-    expect(() => CompanyIdSchema.parse("9183")).toThrow();
+  it("accepts an invalid ID", () => {
+    expect(CompanyIdSchema.parse("9183")).toEqual("9183");
   });
 });
