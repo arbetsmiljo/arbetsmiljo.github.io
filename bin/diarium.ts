@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
+import { parseISO, isFuture } from "date-fns";
 import { readFileSync } from "fs";
 import { initKysely, createDatabase, readDocument } from "./database.js";
 import { fetchDiariumCase } from "./case.js";
@@ -62,7 +63,9 @@ program
   .option("-m, --ms <ms>", "Delay between requests", "1000")
   .action(async (period, { filename, ms }) => {
     const db = initKysely(filename);
-    const dates = generateDateRange(period);
+    const dates = generateDateRange(period).filter(
+      (date) => !isFuture(parseISO(date)),
+    );
     dates.reverse();
     for (const date of dates) {
       await ingestDiariumDay(db, date, parseInt(ms));
