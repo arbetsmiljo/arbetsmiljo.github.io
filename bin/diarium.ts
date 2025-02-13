@@ -2,11 +2,11 @@
 
 import { Command } from "commander";
 import { readFileSync } from "fs";
-import { initKysely, createDatabase, readDocument } from "./database";
-import { fetchDiariumCase } from "./case";
-import { ingestDiariumDay } from "./ingestion";
-import { fetchDiariumPage } from "./pagination";
-import { generateDateRange } from "./time";
+import { initKysely, createDatabase, readDocument } from "./database.js";
+import { fetchDiariumCase } from "./case.js";
+import { ingestDiariumDay } from "./ingestion.js";
+import { fetchDiariumPage } from "./pagination.js";
+import { generateDateRange } from "./time.js";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 

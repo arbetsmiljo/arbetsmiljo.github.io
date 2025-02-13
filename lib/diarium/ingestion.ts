@@ -3,9 +3,9 @@ import {
   DiariumDatabase,
   readDocument,
   writeDocument,
-} from "./database";
-import { fetchDiariumCase } from "./case";
-import { DiariumPage, fetchDiariumPage } from "./pagination";
+} from "./database.js";
+import { fetchDiariumCase } from "./case.js";
+import { DiariumPage, fetchDiariumPage } from "./pagination.js";
 import ora from "ora-classic";
 import { Kysely } from "kysely";
 

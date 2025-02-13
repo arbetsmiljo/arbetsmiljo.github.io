@@ -1,7 +1,7 @@
 import { JSDOM } from "jsdom";
 import _ from "lodash";
 import fetch from "cross-fetch";
-import { type DiariumDocument, DiariumDocumentSchema } from "./document";
+import { type DiariumDocument, DiariumDocumentSchema } from "./document.js";
 import z from "zod";
 
 export type DiariumPage = {

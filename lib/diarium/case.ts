@@ -3,22 +3,22 @@ import _ from "lodash";
 import fetch from "cross-fetch";
 import z from "zod";
 
-import { CompanyIdSchema, CompanyNameSchema } from "./company";
-import { WorkplaceIdSchema, WorkplaceNameSchema } from "./workplace";
+import { CompanyIdSchema, CompanyNameSchema } from "./company.js";
+import { WorkplaceIdSchema, WorkplaceNameSchema } from "./workplace.js";
 
 import {
   type DiariumCountyId,
   type DiariumCountyName,
   DiariumCountyIdSchema,
   DiariumCountyNameSchema,
-} from "./county";
+} from "./county.js";
 
 import {
   type DiariumMunicipalityId,
   type DiariumMunicipalityName,
   DiariumMunicipalityIdSchema,
   DiariumMunicipalityNameSchema,
-} from "./municipality";
+} from "./municipality.js";
 
 /**
  * Data model for case metadata
