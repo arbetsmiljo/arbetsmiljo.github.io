@@ -1,4 +1,6 @@
 import Database from "better-sqlite3";
+import mysql, { type Connection } from "mysql2/promise";
+
 import { Generated, Kysely, SqliteDialect, sql } from "kysely";
 import { type DiariumCase, DiariumCaseSchema } from "./case.js";
 import { type DiariumDocument, DiariumDocumentSchema } from "./document.js";
@@ -7,6 +9,10 @@ type DiariumDocumentsTable = DiariumDocument &
   DiariumCase & {
     created: Generated<Date>;
   };
+
+type DiariumDatabaseDoocument = Omit<DiariumDocumentsTable, "created"> & {
+  created: string;
+};
 
 export interface DiariumDatabase {
   documents: DiariumDocumentsTable;
@@ -103,6 +109,20 @@ export async function readDocument(
   return document;
 }
 
+export async function readDocuments(
+  db: Kysely<DiariumDatabase>,
+  ids: string[],
+): Promise<DiariumDatabaseDoocument[]> {
+  const documents = (
+    await db
+      .selectFrom("documents")
+      .selectAll()
+      .where("documentId", "in", ids)
+      .execute()
+  ).map((document) => ({ ...document, created: `${document.created}` }));
+  return documents;
+}
+
 export async function countDocuments(
   db: Kysely<DiariumDatabase>,
   documentDate: string,
@@ -113,4 +133,87 @@ export async function countDocuments(
     .where("documentDate", "=", documentDate)
     .executeTakeFirst();
   return result?.documentCount ? Number(result.documentCount) : 0;
+}
+
+export async function fetchDateRange(
+  db: Kysely<DiariumDatabase>,
+): Promise<[string, string]> {
+  const result = await db
+    .selectFrom("documents")
+    .select(db.fn.min("documentDate").as("minDate"))
+    .select(db.fn.max("documentDate").as("maxDate"))
+    .executeTakeFirst();
+  return [result?.minDate ?? "", result?.maxDate ?? ""];
+}
+
+export async function fetchDocumentIds(
+  db: Kysely<DiariumDatabase>,
+  date: string,
+): Promise<string[]> {
+  const result = await db
+    .selectFrom("documents")
+    .select("documentId")
+    .where("documentDate", "=", date)
+    .execute();
+  return result.map((row) => row.documentId);
+}
+
+export async function fetchMissingDocumentIds(
+  dolt: Connection,
+  documentIds: string[],
+): Promise<string[]> {
+  const [rows] = await dolt.query(
+    `SELECT documentId FROM documents WHERE documentId IN (?)`,
+    [documentIds],
+  );
+  const existingDocumentIds = rows.map((row) => row.documentId);
+  const missingDocumentIds = documentIds.filter(
+    (id) => !existingDocumentIds.includes(id),
+  );
+  return missingDocumentIds;
+}
+
+export async function writeToMysql(
+  dolt: Connection,
+  documents: DiariumDatabaseDoocument[],
+): Promise<void> {
+  const query = `
+    INSERT IGNORE INTO documents (
+      documentId,
+      documentDate,
+      documentOrigin,
+      documentType,
+      caseId,
+      caseName,
+      caseSubject,
+      companyId,
+      companyName,
+      workplaceId,
+      workplaceName,
+      countyId,
+      countyName,
+      municipalityId,
+      municipalityName,
+      created
+    ) VALUES ?
+  `;
+  const values = documents.map((document) => [
+    document.documentId,
+    document.documentDate,
+    document.documentOrigin,
+    document.documentType,
+    document.caseId,
+    document.caseName,
+    document.caseSubject,
+    document.companyId,
+    document.companyName,
+    document.workplaceId,
+    document.workplaceName,
+    document.countyId,
+    document.countyName,
+    document.municipalityId,
+    document.municipalityName,
+    document.created,
+  ]);
+  await dolt.query(query, [values]);
 }

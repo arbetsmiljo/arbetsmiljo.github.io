@@ -8,8 +8,7 @@ import { fetchDiariumCase } from "./case.js";
 import { DiariumPage, fetchDiariumPage } from "./pagination.js";
 import ora from "ora-classic";
 import { Kysely } from "kysely";
-
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+import { delay } from "./time.js";
 
 export async function ingestDiariumDay(
   db: Kysely<DiariumDatabase>,

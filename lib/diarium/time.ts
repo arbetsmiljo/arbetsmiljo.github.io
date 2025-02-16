@@ -30,6 +30,13 @@ export function generateDateRange(input: string): string[] {
     throw new Error("Invalid format.");
   }
 
+  return dateRange(format(start, "yyyy-MM-dd"), format(end, "yyyy-MM-dd"));
+}
+
+export function dateRange(from: string, to: string): string[] {
+  const start = parseISO(from);
+  const end = parseISO(to);
+
   const dates = [];
   let current = start;
 
@@ -40,3 +47,6 @@ export function generateDateRange(input: string): string[] {
 
   return dates;
 }
+
+export const delay = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
