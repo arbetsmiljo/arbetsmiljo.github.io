@@ -33,7 +33,7 @@ export default function Home() {
                 <DescriptionItem key={year}>
                   <DescriptionTerm>
                     <a
-                      className="font-bold underline text-blue-600"
+                      className="font-bold underline text-link"
                       href={`/${year}`}
                     >
                       {year}
