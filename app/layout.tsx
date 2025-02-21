@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "arbetsmiljo.github.io",
+  title: "arbetsmiljo.codeberg.page",
   description: "Arbetssmiljö data",
 };
 
@@ -32,8 +32,8 @@ export default function RootLayout({
       >
         <Page>
           <HeaderMenu
-            href="https://arbetsmiljo.github.io"
-            text="arbetsmiljo.github.io"
+            href="https://arbetsmiljo.codeberg.page"
+            text="arbetsmiljo.codeberg.page"
           />
           {children}
           <Footer
