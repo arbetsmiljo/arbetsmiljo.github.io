@@ -6,8 +6,13 @@ import z from "zod";
  * | Inkommande | Incoming    | Documents received by Arbetsmiljöverket from the outside world. |
  * | Upprättad  | Created     | |
  * | Utgående   | Outgoing    | Documents originating with Arbetsmiljöverket and sent by them to a third party. |
+ * |            |             | In very rare cases such as 2020/024007-8 documents may lack an origin. |
  */
-export type DiariumDocumentOrigin = "Inkommande" | "Upprättad" | "Utgående";
+export type DiariumDocumentOrigin =
+  | "Inkommande"
+  | "Upprättad"
+  | "Utgående"
+  | "";
 
 /**
  * Document types are quite an important field. They're the closest you can get
@@ -185,7 +190,12 @@ export const DiariumDocumentDateSchema = z
   });
 
 export const DiariumDocumentOriginSchema = z.union(
-  [z.literal("Inkommande"), z.literal("Upprättad"), z.literal("Utgående")],
+  [
+    z.literal("Inkommande"),
+    z.literal("Upprättad"),
+    z.literal("Utgående"),
+    z.literal(""),
+  ],
   {
     message: "Invalid document origin",
   },
