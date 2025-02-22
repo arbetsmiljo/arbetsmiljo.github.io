@@ -32,15 +32,12 @@ export default function RootLayout({
       >
         <Page>
           <HeaderMenu
-            href="https://arbetsmiljo.codeberg.page"
-            text="arbetsmiljo.codeberg.page"
+            canonicalUrl="https://arbetsmiljo.codeberg.page"
+            deploymentUrl="https://arbetsmiljo.codeberg.page"
           />
           {children}
           <Footer
-            sourceCode={[
-              "arbetsmiljo/arbetsmiljo.github.io",
-              "arbetsmarknad/components",
-            ]}
+            sourceCode={["arbetsmiljo/pages", "arbetsmarknad/components"]}
           />
         </Page>
       </body>

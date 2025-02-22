@@ -1,7 +1,7 @@
-# starter
+# arbetsmiljo/pages
 
-Web starter project.
+Swedish work environment data visualisation
 
 ## License
 
-[MIT](https://github.com/arbetsmarknad/starter/blob/main/license)
+[MIT](https://codeberg.org/arbetsmiljo/pages/src/branch/main/license)
