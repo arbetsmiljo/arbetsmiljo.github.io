@@ -26,6 +26,7 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
+    "diarium": "cd ../diarium; pnpm diarium combineDatabases ../2020/db.sqlite ../2021/db.sqlite ../2022/db.sqlite ../2023/db.sqlite ../2024/db.sqlite ../2025/db.sqlite ../2026/db.sqlite --dst ../pages/db.sqlite",
     "lint": "next lint",
     "ship": "pnpm build && npx gh-pages --nojekyll --no-history --branch pages -d out --repo git@codeberg.org:arbetsmiljo/pages.git",
     "start": "next start"
