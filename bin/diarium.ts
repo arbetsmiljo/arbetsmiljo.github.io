@@ -41,6 +41,19 @@ program
   });
 
 program
+  .command("combineDatabases")
+  .description("Merge multiple databases")
+  .argument("<src...>", "one or more source database filenames")
+  .requiredOption("-d, --dst <dst>", "destination database filename")
+  .action(async (srcFiles: string[], { dst }) => {
+    const db = initKysely(dst);
+    await createDatabase(db);
+    for (const src of srcFiles) {
+      importDocuments(src, dst);
+    }
+  });
+
+program
   .command("createDatabase")
   .description("Create a new blank database")
   .option("-f, --filename <filename>", "database filename", "db.sqlite")
