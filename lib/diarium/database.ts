@@ -217,3 +217,12 @@ export async function writeToMysql(
   ]);
   await dolt.query(query, [values]);
 }
+
+export function importDocuments(
+  src: string,
+  dst: string,
+): void {
+  const db = new Database(dst);
+  db.exec(`ATTACH DATABASE '${src}' AS src`);
+  db.exec(`INSERT OR IGNORE INTO documents SELECT * FROM src.documents`);
+}

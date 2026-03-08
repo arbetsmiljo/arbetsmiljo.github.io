@@ -5,7 +5,7 @@ import { parseISO, isFuture } from "date-fns";
 import { readFileSync } from "fs";
 import mysql from "mysql2/promise";
 
-import { initKysely, createDatabase, readDocument } from "./database.js";
+import { initKysely, createDatabase, readDocument, importDocuments } from "./database.js";
 import { fetchDiariumCase } from "./case.js";
 import { ingestDiariumDay } from "./ingestion.js";
 import { fetchDiariumPage } from "./pagination.js";
@@ -75,6 +75,14 @@ program
   .action(async (period) => {
     const dates = generateDateRange(period);
     process.stdout.write(`${JSON.stringify(dates, null, 2)}\n`);
+  });
+
+program
+  .command("importDocuments")
+  .requiredOption("-s, --src <src>", "source database filename")
+  .requiredOption("-d, --dst <dst>", "destination database filename")
+  .action(async ({ src, dst }) => {
+    importDocuments(src, dst);
   });
 
 program
