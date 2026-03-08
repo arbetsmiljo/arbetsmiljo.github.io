@@ -1,0 +1,111 @@
+"use client";
+
+import * as React from "react";
+import { FC } from "react";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@arbetsmarknad/components/Card";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@arbetsmarknad/components/Chart";
+
+type DateRangeBarChartProps = {
+  title: string;
+  description: string;
+  data: { date: string; value: number }[];
+  valueLabel: string;
+};
+
+export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
+  title,
+  description,
+  data,
+  valueLabel,
+}) => {
+  const chartConfig = {
+    value: { label: valueLabel },
+  } satisfies ChartConfig;
+
+  const total = data.reduce((acc, { value }) => {
+    return acc + value;
+  }, 0);
+
+  return (
+    <Card className="w-full border-background-secondary">
+      <CardHeader className="flex flex-row items-stretch space-y-0 border-background-secondary border-b p-0 sm:flex-row">
+        <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
+          <CardTitle>{title}</CardTitle>
+          <CardDescription>{description}</CardDescription>
+        </div>
+        <div className="flex">
+          <div className="relative z-30 flex flex-1 flex-col justify-center gap-1 px-6 py-4 text-left border-background-secondary even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6">
+            <span className="text-xs text-muted-foreground">Totalt</span>
+            <span className="text-lg font-bold leading-none sm:text-3xl">
+              {total}
+            </span>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent className="p-0">
+        <ChartContainer
+          config={chartConfig}
+          className="aspect-auto h-[250px] w-full"
+        >
+          <BarChart
+            accessibilityLayer
+            data={data}
+            margin={{
+              left: 48,
+              right: 24,
+            }}
+          >
+            <CartesianGrid
+              vertical={false}
+              stroke="var(--color-background-secondary)"
+            />
+            <YAxis
+              dataKey="value"
+              tickMargin={8}
+              width={10}
+              axisLine={false}
+              stroke="var(--color-foreground)"
+              tickCount={6}
+              tickSize={0}
+            />
+            <XAxis
+              dataKey="date"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={4}
+              minTickGap={32}
+              stroke="var(--color-foreground)"
+              tickFormatter={(value) => value}
+            />
+            <ChartTooltip
+              offset={-10}
+              content={
+                <ChartTooltipContent
+                  className="w-[150px] bg-background"
+                  nameKey="value"
+                  labelFormatter={(value) => {
+                    return value;
+                    // return new Date(value).getFullYear();
+                  }}
+                />
+              }
+            />
+            <Bar dataKey="value" fill="var(--color-foreground)" />
+          </BarChart>
+        </ChartContainer>
+      </CardContent>
+    </Card>
+  );
+};

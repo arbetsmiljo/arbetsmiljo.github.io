@@ -1,13 +1,20 @@
 {
   "dependencies": {
+    "better-sqlite3": "^12.6.2",
+    "chartjs": "^0.3.24",
+    "kysely": "^0.28.11",
     "next": "15.1.6",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-chartjs-2": "^5.3.1",
+    "react-dom": "^19.0.0",
+    "recharts": "^3.8.0",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@arbetsmarknad/components": "^1.1.0",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4.0.0",
+    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -18,6 +25,12 @@
     "typescript": "^5"
   },
   "name": "@arbetsmarknad/starter",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3",
+      "sqlite3"
+    ]
+  },
   "postcss": {
     "plugins": {
       "@tailwindcss/postcss": {}

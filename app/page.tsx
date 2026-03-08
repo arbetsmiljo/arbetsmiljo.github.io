@@ -11,9 +11,25 @@ import { Section } from "@arbetsmarknad/components/Section";
 import { SectionHeading } from "@arbetsmarknad/components/SectionHeading";
 import { TopLevelHeading } from "@arbetsmarknad/components/TopLevelHeading";
 
+import { countDocumentsPerYear, initKysely } from "@/lib/database";
+import { DateRangeBarChart } from "@/components/DateRangeBarChart";
+import { Card, CardContent } from "@arbetsmarknad/components/Card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@arbetsmarknad/components/Table";
+
 const yearsWithData = ["2026", "2025", "2024", "2023", "2022", "2021"];
 
-export default function Home() {
+export default async function Home() {
+  const databasePath = 'db.sqlite';
+  const db = initKysely(databasePath);
+  const documentsPerYear = await countDocumentsPerYear(db);
+
   return (
     <>
       <Breadcrumbs>
@@ -25,25 +41,52 @@ export default function Home() {
       <Main>
         <Container className="flex flex-col items-start space-y-4">
           <TopLevelHeading text="Arbetsmiljödata och -statistik" />
-          <p></p>
-          <Section>
-            <SectionHeading>År</SectionHeading>
-            <DescriptionList>
-              {yearsWithData.map((year) => (
-                <DescriptionItem key={year}>
-                  <DescriptionTerm>
-                    <a
-                      className="font-bold underline text-link"
-                      href={`/${year}`}
-                    >
-                      {year}
-                    </a>
-                  </DescriptionTerm>
-                  <DescriptionDetails>{`Statistik om arbetsmiljön ${year}`}</DescriptionDetails>
-                </DescriptionItem>
-              ))}
-            </DescriptionList>
-          </Section>
+
+          <DateRangeBarChart
+            title="Handlingar per år"
+            description="Antalet handlingar per år."
+            data={documentsPerYear}
+            valueLabel="Handlingar"
+          />
+
+          <Card className="flex flex-col gap-y-4 border-background-secondary w-full">
+            <CardContent className="flex-1 pb-4">
+              <Table className="text-base">
+                <TableHeader>
+                  <TableRow className="border-background-secondary">
+                    <TableHead className="font-bold px-0">
+                      År
+                    </TableHead>
+                    <TableHead className="font-bold px-0">
+                      Handlingar
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {documentsPerYear.map(
+                    ({ date, value }) => (
+                      <TableRow
+                        key={date}
+                        className="border-background-secondary"
+                      >
+                        <TableCell className="font-medium px-0">
+                          <a
+                            className="text-link underline"
+                            href={`/${date}`}
+                          >
+                            {date}
+                          </a>
+                        </TableCell>
+                        <TableCell className="px-0">{value}</TableCell>
+                      </TableRow>
+                    ),
+                  )}
+
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+
         </Container>
       </Main>
     </>
