@@ -1,14 +1,6 @@
 import { Breadcrumbs } from "@arbetsmarknad/components/Breadcrumb";
-import {
-  DescriptionList,
-  DescriptionItem,
-  DescriptionTerm,
-  DescriptionDetails,
-} from "@arbetsmarknad/components/DescriptionList";
 import { Container } from "@arbetsmarknad/components/Container";
 import { Main } from "@arbetsmarknad/components/Main";
-import { Section } from "@arbetsmarknad/components/Section";
-import { SectionHeading } from "@arbetsmarknad/components/SectionHeading";
 import { TopLevelHeading } from "@arbetsmarknad/components/TopLevelHeading";
 
 import { countDocumentsPerYear, initKysely } from "@/lib/database";
@@ -23,8 +15,6 @@ import {
   TableRow,
 } from "@arbetsmarknad/components/Table";
 
-const yearsWithData = ["2026", "2025", "2024", "2023", "2022", "2021"];
-
 export default async function Home() {
   const databasePath = 'db.sqlite';
   const db = initKysely(databasePath);
@@ -34,7 +24,7 @@ export default async function Home() {
     <>
       <Breadcrumbs>
         {{
-          "https://arbetsmarknad.codeberg.page/": "Arbetsmarknad",
+          "https://arbetsmarknad.github.io/": "Arbetsmarknad",
           "/": "Arbetsmiljö",
         }}
       </Breadcrumbs>

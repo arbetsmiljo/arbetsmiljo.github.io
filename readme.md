@@ -4,4 +4,4 @@ Swedish work environment data visualisation
 
 ## License
 
-[CC-0](https://codeberg.org/arbetsmiljo/pages/src/branch/main/license)
+[CC-0](https://github.com/arbetsmarknad/arbetsmarknad.github.io/blob/main/license)
