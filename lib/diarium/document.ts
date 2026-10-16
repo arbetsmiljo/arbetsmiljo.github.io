@@ -247,6 +247,7 @@ export const DiariumDocumentTypeSchema = z.union(
     z.literal("Behovsanalys/marknadsanalys"),
     z.literal("Bekräftelse/Svar/Uppmaning till uppgiftslämnare"),
     z.literal("Beslut"),
+    z.literal("Beslut att starta föreskriftsprojekt"),
     z.literal("Beslut om att avvisa skyddsombudets begäran"),
     z.literal("Beslut om att inte meddela omedelbart förbud"),
     z.literal("Beslut om att ärende avslutas (avslutsbrev)"),
