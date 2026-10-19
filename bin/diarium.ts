@@ -2,7 +2,7 @@
 
 import { Command } from "commander";
 import { parseISO, isFuture } from "date-fns";
-import { readFileSync } from "fs";
+import { readFileSync, existsSync } from "fs";
 
 
 import { initKysely, createDatabase, readDocument, importDocuments } from "./database.js";
@@ -28,6 +28,14 @@ program
   .argument("<src...>", "one or more source database filenames")
   .requiredOption("-d, --dst <dst>", "destination database filename")
   .action(async (srcFiles: string[], { dst }) => {
+    const missingSrcFiles = srcFiles.filter((src) => !existsSync(src));
+
+    if (missingSrcFiles.length > 0) {
+      throw new Error(
+        `Missing source database file(s): ${missingSrcFiles.join(", ")}`,
+      );
+    }
+
     const db = initKysely(dst);
     await createDatabase(db);
     for (const src of srcFiles) {
@@ -77,6 +85,10 @@ program
   .requiredOption("-s, --src <src>", "source database filename")
   .requiredOption("-d, --dst <dst>", "destination database filename")
   .action(async ({ src, dst }) => {
+    if (!existsSync(src)) {
+      throw new Error(`Missing source database file: ${src}`);
+    }
+
     importDocuments(src, dst);
   });
 
