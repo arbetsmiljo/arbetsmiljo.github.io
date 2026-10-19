@@ -1,5 +1,5 @@
 import Database from "better-sqlite3";
-import mysql, { type Connection } from "mysql2/promise";
+
 
 import { Generated, Kysely, SqliteDialect, sql } from "kysely";
 import { type DiariumCase, DiariumCaseSchema } from "./case.js";
@@ -158,65 +158,6 @@ export async function fetchDocumentIds(
   return result.map((row) => row.documentId);
 }
 
-export async function fetchMissingDocumentIds(
-  dolt: Connection,
-  documentIds: string[],
-): Promise<string[]> {
-  const [rows] = await dolt.query(
-    `SELECT documentId FROM documents WHERE documentId IN (?)`,
-    [documentIds],
-  );
-  const existingDocumentIds = rows.map((row) => row.documentId);
-  const missingDocumentIds = documentIds.filter(
-    (id) => !existingDocumentIds.includes(id),
-  );
-  return missingDocumentIds;
-}
-
-export async function writeToMysql(
-  dolt: Connection,
-  documents: DiariumDatabaseDoocument[],
-): Promise<void> {
-  const query = `
-    INSERT IGNORE INTO documents (
-      documentId,
-      documentDate,
-      documentOrigin,
-      documentType,
-      caseId,
-      caseName,
-      caseSubject,
-      companyId,
-      companyName,
-      workplaceId,
-      workplaceName,
-      countyId,
-      countyName,
-      municipalityId,
-      municipalityName,
-      created
-    ) VALUES ?
-  `;
-  const values = documents.map((document) => [
-    document.documentId,
-    document.documentDate,
-    document.documentOrigin,
-    document.documentType,
-    document.caseId,
-    document.caseName,
-    document.caseSubject,
-    document.companyId,
-    document.companyName,
-    document.workplaceId,
-    document.workplaceName,
-    document.countyId,
-    document.countyName,
-    document.municipalityId,
-    document.municipalityName,
-    document.created,
-  ]);
-  await dolt.query(query, [values]);
-}
 
 export function importDocuments(
   src: string,

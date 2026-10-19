@@ -3,7 +3,7 @@
 import { Command } from "commander";
 import { parseISO, isFuture } from "date-fns";
 import { readFileSync } from "fs";
-import mysql from "mysql2/promise";
+
 
 import { initKysely, createDatabase, readDocument, importDocuments } from "./database.js";
 import { fetchDiariumCase } from "./case.js";
@@ -12,7 +12,7 @@ import { fetchDiariumPage } from "./pagination.js";
 import { generateDateRange } from "./time.js";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { exportToDolt } from "./dolt.js";
+
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -21,24 +21,6 @@ const pkg = JSON.parse(readFileSync(`${__dirname}/../package.json`, "utf8"));
 const program = new Command();
 program.name(pkg.name).description(pkg.description).version(pkg.name);
 
-program
-  .command("exportToDolt")
-  .description("Copy database to Dolt")
-  .option(
-    "-f, --filename <filename>",
-    "database filename for SQLite",
-    "db.sqlite",
-  )
-  .option("-d, --database <database>", "database name in Dolt", "diarium")
-  .action(async ({ filename, database }) => {
-    const db = initKysely(filename);
-    const dolt = await mysql.createConnection({
-      host: "localhost",
-      user: "root",
-      database,
-    });
-    await exportToDolt(db, dolt);
-  });
 
 program
   .command("combineDatabases")

@@ -73,6 +73,7 @@ export type DiariumDocumentType =
   | "Behovsanalys/marknadsanalys"
   | "Bekräftelse/Svar/Uppmaning till uppgiftslämnare"
   | "Beslut"
+  | "Beslut att starta föreskriftsprojekt"
   | "Beslut om att avvisa skyddsombudets begäran"
   | "Beslut om att inte meddela omedelbart förbud"
   | "Beslut om att ärende avslutas (avslutsbrev)"
