@@ -25,12 +25,6 @@
     "typescript": "^5"
   },
   "name": "@arbetsmarknad/starter",
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "better-sqlite3",
-      "sqlite3"
-    ]
-  },
   "postcss": {
     "plugins": {
       "@tailwindcss/postcss": {}
@@ -38,10 +32,11 @@
   },
   "scripts": {
     "build": "next build",
+    "deploy": " npx gh-pages --nojekyll --no-history --branch gh-pages -d out --repo git@github.com:arbetsmiljo/arbetsmiljo.github.io.git",
     "dev": "next dev",
-    "diarium": "cd ../diarium; pnpm diarium combineDatabases ../2020/db.sqlite ../2021/db.sqlite ../2022/db.sqlite ../2023/db.sqlite ../2024/db.sqlite ../2025/db.sqlite ../2026/db.sqlite --dst ../pages/db.sqlite",
+    "diarium": "cd ../arbetsmiljo-diarium; pnpm diarium combineDatabases ../arbetsmiljo-2020/db.sqlite ../arbetsmiljo-2021/db.sqlite ../arbetsmiljo-2022/db.sqlite ../arbetsmiljo-2023/db.sqlite ../arbetsmiljo-2024/db.sqlite ../arbetsmiljo-2025/db.sqlite ../arbetsmiljo-2026/db.sqlite --dst ../arbetsmiljo-homepage/db.sqlite",
     "lint": "next lint",
-    "ship": "pnpm build && npx gh-pages --nojekyll --no-history --branch gh-pages -d out --repo git@github.com:arbetsmiljo/arbetsmiljo.github.io.git",
+    "ship": "pnpm build && pnpm deploy",
     "start": "next start"
   },
   "version": "0.1.0"
