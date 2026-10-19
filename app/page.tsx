@@ -1,11 +1,11 @@
-import { Breadcrumbs } from "@arbetsmarknad/components/Breadcrumb";
-import { Container } from "@arbetsmarknad/components/Container";
-import { Main } from "@arbetsmarknad/components/Main";
-import { TopLevelHeading } from "@arbetsmarknad/components/TopLevelHeading";
+import { Breadcrumbs } from "@svenskamodellen/components/Breadcrumb";
+import { Container } from "@svenskamodellen/components/Container";
+import { Main } from "@svenskamodellen/components/Main";
+import { TopLevelHeading } from "@svenskamodellen/components/TopLevelHeading";
 
 import { countDocumentsPerYear, initKysely } from "@/lib/database";
 import { DateRangeBarChart } from "@/components/DateRangeBarChart";
-import { Card, CardContent } from "@arbetsmarknad/components/Card";
+import { Card, CardContent } from "@svenskamodellen/components/Card";
 import {
   Table,
   TableBody,
@@ -13,7 +13,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@arbetsmarknad/components/Table";
+} from "@svenskamodellen/components/Table";
 
 export default async function Home() {
   const databasePath = 'db.sqlite';
@@ -24,7 +24,7 @@ export default async function Home() {
     <>
       <Breadcrumbs>
         {{
-          "https://arbetsmarknad.github.io/": "Arbetsmarknad",
+          "https://svenskamodellen.github.io/": "Svenska modellen",
           "/": "Arbetsmiljö",
         }}
       </Breadcrumbs>

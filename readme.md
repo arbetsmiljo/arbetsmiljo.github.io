@@ -1,8 +1,8 @@
 # arbetsmiljo.github.io
 
-Homepage for the work environment data visualisation subsite of the arbetsmarknad Swedish labour market documentation project.
+Homepage for the work environment data visualisation subsite of the svenskamodellen Swedish labour market documentation project.
 
-All filesystem lookups in this repo assume a runtime context matching the structure defined in the README of [arbetsmarknad/workspace](https://github.com/arbetsmarknad/workspace).
+All filesystem lookups in this repo assume a runtime context matching the structure defined in the README of [svenskamodellen/workspace](https://github.com/svenskamodellen/workspace).
 
 ## Commands
 
@@ -13,4 +13,4 @@ All filesystem lookups in this repo assume a runtime context matching the struct
 
 ## License
 
-[CC-0](https://github.com/arbetsmarknad/arbetsmarknad.github.io/blob/main/license)
+[CC-0](https://github.com/arbetsmiljo/arbetsmiljo.github.io/blob/main/license)

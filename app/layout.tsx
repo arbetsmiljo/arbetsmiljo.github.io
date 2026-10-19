@@ -1,6 +1,6 @@
-import { Footer } from "@arbetsmarknad/components/Footer";
-import { HeaderMenu } from "@arbetsmarknad/components/HeaderMenu";
-import { Page } from "@arbetsmarknad/components/Page";
+import { Footer } from "@svenskamodellen/components/Footer";
+import { HeaderMenu } from "@svenskamodellen/components/HeaderMenu";
+import { Page } from "@svenskamodellen/components/Page";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -37,7 +37,7 @@ export default function RootLayout({
           />
           {children}
           <Footer
-            sourceCode={["arbetsmiljo/arbetsmarknad.github.io", "arbetsmiljo/arbetsmarknad.github.io"]}
+            sourceCode={["arbetsmiljo/arbetsmiljo.github.io", "svenskamodellen/components"]}
           />
         </Page>
       </body>
