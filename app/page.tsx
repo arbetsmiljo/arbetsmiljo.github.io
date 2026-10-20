@@ -29,7 +29,7 @@ export default async function Home() {
         }}
       </Breadcrumbs>
       <Main>
-        <Container className="flex flex-col items-start space-y-4">
+        <Container className="flex flex-col items-start space-y-8">
           <TopLevelHeading text="Arbetsmiljödata och -statistik" />
 
           <DateRangeBarChart

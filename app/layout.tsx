@@ -1,5 +1,4 @@
 import { Footer } from "@svenskamodellen/components/Footer";
-import { HeaderMenu } from "@svenskamodellen/components/HeaderMenu";
 import { Page } from "@svenskamodellen/components/Page";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -31,10 +30,6 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Page>
-          <HeaderMenu
-            canonicalUrl="https://arbetsmiljo.github.io"
-            deploymentUrl="https://arbetsmiljo.github.io"
-          />
           {children}
           <Footer
             sourceCode={["arbetsmiljo/arbetsmiljo.github.io", "svenskamodellen/components"]}
