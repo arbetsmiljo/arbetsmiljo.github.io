@@ -47,14 +47,14 @@ export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
         </div>
         <div className="flex">
           <div className="relative z-30 flex flex-1 flex-col justify-center gap-1 px-6 py-4 text-left border-background-secondary even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6">
-            <span className="font-lilex text-xs text-muted-foreground">Totalt</span>
-            <span className="font-serif text-lg font-bold leading-none sm:text-3xl">
+            <span className="body-text text-muted-foreground">Totalt</span>
+            <span className="section-heading">
               {total}
             </span>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="p-0">
+      <CardContent className="px-4 py-8">
         <ChartContainer
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"

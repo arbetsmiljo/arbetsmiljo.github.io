@@ -30,7 +30,7 @@ export default async function Home() {
       </Breadcrumbs>
       <Main>
         <Container className="flex flex-col items-start space-y-8">
-          <TopLevelHeading text="Arbetsmiljödata och -statistik" />
+          <TopLevelHeading text="Arbetsmiljödata och -statistik" subtext="Mönster och trender i Arbetsmiljöverkets diarium" />
 
           <DateRangeBarChart
             title="Handlingar per år"
@@ -39,7 +39,7 @@ export default async function Home() {
             valueLabel="Handlingar"
           />
 
-          <Card className="flex flex-col gap-y-4 border-background-secondary w-full">
+          <Card className="flex flex-col gap-y-4 border-background-secondary w-full pt-4 ">
             <CardContent className="flex-1 pb-4">
               <Table className="text-base">
                 <TableHeader>
@@ -59,7 +59,7 @@ export default async function Home() {
                         key={date}
                         className="border-background-secondary"
                       >
-                        <TableCell className="font-medium px-0">
+                        <TableCell className="body-text px-0">
                           <a
                             className="text-link underline"
                             href={`/${date}`}
@@ -67,7 +67,7 @@ export default async function Home() {
                             {date}
                           </a>
                         </TableCell>
-                        <TableCell className="px-0">{value}</TableCell>
+                        <TableCell className="body-text px-0">{value}</TableCell>
                       </TableRow>
                     ),
                   )}
