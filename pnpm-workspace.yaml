@@ -4,4 +4,4 @@ allowBuilds:
   sqlite3: true
   unrs-resolver: true
 minimumReleaseAgeExclude:
-  - '@svenskamodellen/components@1.7.0'
+  - '@svenskamodellen/components@1.7.0 || 1.8.0 || 1.9.0'
