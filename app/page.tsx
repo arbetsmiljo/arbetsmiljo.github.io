@@ -3,22 +3,17 @@ import { Container } from "@svenskamodellen/components/Container";
 import { Main } from "@svenskamodellen/components/Main";
 import { TopLevelHeading } from "@svenskamodellen/components/TopLevelHeading";
 
-import { countDocumentsPerYear, initKysely } from "@/lib/database";
+import { countAsbestDocumentsPerYear, countCovidTillbudPerMonth, countDocumentsPerYear, countInspektionDocumentsPerYear, countOlycksfallCasesPerYear, initKysely } from "@/lib/database";
 import { DateRangeBarChart } from "@/components/DateRangeBarChart";
-import { Card, CardContent } from "@svenskamodellen/components/Card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@svenskamodellen/components/Table";
 
 export default async function Home() {
   const databasePath = 'db.sqlite';
   const db = initKysely(databasePath);
   const documentsPerYear = await countDocumentsPerYear(db);
+  const inspektionDocumentsPerYear = await countInspektionDocumentsPerYear(db);
+  const olycksfallCasesPerYear = await countOlycksfallCasesPerYear(db);
+  const asbestDocumentsPerYear = await countAsbestDocumentsPerYear(db);
+  const covidTillbudPerMonth = await countCovidTillbudPerMonth(db);
 
   return (
     <>
@@ -37,45 +32,41 @@ export default async function Home() {
             description="Antalet handlingar per år."
             data={documentsPerYear}
             valueLabel="Handlingar"
+            titleHref="/handlingar-per-ar"
+            hrefPattern="/{date}"
           />
 
-          <Card className="flex flex-col gap-y-4 border-background-secondary w-full pt-4 ">
-            <CardContent className="flex-1 pb-4">
-              <Table className="text-base">
-                <TableHeader>
-                  <TableRow className="border-background-secondary">
-                    <TableHead className="font-bold px-0">
-                      År
-                    </TableHead>
-                    <TableHead className="font-bold px-0">
-                      Handlingar
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {documentsPerYear.map(
-                    ({ date, value }) => (
-                      <TableRow
-                        key={date}
-                        className="border-background-secondary"
-                      >
-                        <TableCell className="body-text px-0">
-                          <a
-                            className="text-link underline"
-                            href={`/${date}`}
-                          >
-                            {date}
-                          </a>
-                        </TableCell>
-                        <TableCell className="body-text px-0">{value}</TableCell>
-                      </TableRow>
-                    ),
-                  )}
+          <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2">
+            <DateRangeBarChart
+              title="Covid"
+              description="Antalet tillbud om smitta (covid) som rapporterats in per månad."
+              data={covidTillbudPerMonth}
+              valueLabel="Tillbud"
+              titleHref="/covid"
+            />
 
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
+            <DateRangeBarChart
+              title="Inspektioner"
+              description="Antalet handlingar som innehåller ordet 'inspektion'."
+              data={inspektionDocumentsPerYear}
+              valueLabel="Handlingar"
+            />
+
+            <DateRangeBarChart
+              title="Olycksfall"
+              description="Antalet ärenden som innehåller ordet 'olycksfall' per år."
+              data={olycksfallCasesPerYear}
+              valueLabel="Ärenden"
+            />
+
+            <DateRangeBarChart
+              title="Asbest"
+              description="Antalet handlingar som innehåller ordet 'asbest'."
+              data={asbestDocumentsPerYear}
+              valueLabel="Handlingar"
+              hrefPattern="/{date}/asbest"
+            />
+          </div>
 
         </Container>
       </Main>

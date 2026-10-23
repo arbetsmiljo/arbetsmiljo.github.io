@@ -22,6 +22,8 @@ type DateRangeBarChartProps = {
   description: string;
   data: { date: string; value: number }[];
   valueLabel: string;
+  hrefPattern?: string;
+  titleHref?: string;
 };
 
 export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
@@ -29,6 +31,8 @@ export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
   description,
   data,
   valueLabel,
+  hrefPattern,
+  titleHref,
 }) => {
   const chartConfig = {
     value: { label: valueLabel },
@@ -42,7 +46,15 @@ export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
     <Card className="w-full border-background-secondary">
       <CardHeader className="flex flex-row items-stretch space-y-0 border-background-secondary border-b p-0 sm:flex-row">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
-          <CardTitle>{title}</CardTitle>
+          <CardTitle>
+            {titleHref ? (
+              <a className="text-link underline" href={titleHref}>
+                {title}
+              </a>
+            ) : (
+              title
+            )}
+          </CardTitle>
           <CardDescription>{description}</CardDescription>
         </div>
         <div className="flex">
@@ -79,6 +91,7 @@ export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
               stroke="var(--color-foreground)"
               tickCount={6}
               tickSize={0}
+              tick={{ className: "body-text" }}
             />
             <XAxis
               dataKey="date"
@@ -88,6 +101,32 @@ export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
               minTickGap={32}
               stroke="var(--color-foreground)"
               tickFormatter={(value) => value}
+              tick={
+                hrefPattern
+                  ? (props) => {
+                      const { x, y, payload } = props as {
+                        x: number;
+                        y: number;
+                        payload: { value: string };
+                      };
+                      return (
+                        <a href={hrefPattern.replace("{date}", payload.value)}>
+                          <text
+                            x={x}
+                            y={y}
+                            dy={12}
+                            textAnchor="middle"
+                            fill="var(--color-link)"
+                            textDecoration="underline"
+                            className="cursor-pointer body-text"
+                          >
+                            {payload.value}
+                          </text>
+                        </a>
+                      );
+                    }
+                  : { className: "body-text" }
+              }
             />
             <ChartTooltip
               offset={-10}
@@ -102,7 +141,35 @@ export const DateRangeBarChart: FC<DateRangeBarChartProps> = ({
                 />
               }
             />
-            <Bar dataKey="value" fill="var(--color-foreground)" />
+            <Bar
+              dataKey="value"
+              fill="var(--color-foreground)"
+              cursor={hrefPattern ? "pointer" : undefined}
+              shape={
+                hrefPattern
+                  ? (props) => {
+                      const { x, y, width, height, payload } = props as {
+                        x: number;
+                        y: number;
+                        width: number;
+                        height: number;
+                        payload: { date: string };
+                      };
+                      return (
+                        <a href={hrefPattern.replace("{date}", payload.date)}>
+                          <rect
+                            x={x}
+                            y={y}
+                            width={width}
+                            height={height}
+                            fill="var(--color-foreground)"
+                          />
+                        </a>
+                      );
+                    }
+                  : undefined
+              }
+            />
           </BarChart>
         </ChartContainer>
       </CardContent>
