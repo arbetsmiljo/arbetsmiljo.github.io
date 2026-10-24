@@ -100,6 +100,78 @@ export async function countOlycksfallCasesPerYear(
   }));
 }
 
+export async function countSixSixACasesPerYear(
+  db: Kysely<DiariumDatabase>
+): Promise<{ date: string; value: number }[]> {
+  const result = await db
+    .selectFrom("documents")
+    .select([
+      sql<string>`strftime('%Y', documentDate)`.as("year"),
+      sql<number>`count(distinct caseId)`.as("caseCount"),
+    ])
+    .where((eb) =>
+      eb.or([
+        eb(sql`lower(caseName)`, "like", "%6:6a%"),
+        eb(sql`lower(caseName)`, "like", "%6-6a%"),
+        eb(sql`lower(caseName)`, "like", "%6 kap. 6 a%"),
+        eb(sql`lower(caseSubject)`, "like", "%6:6a%"),
+        eb(sql`lower(caseSubject)`, "like", "%6-6a%"),
+        eb(sql`lower(caseSubject)`, "like", "%6 kap. 6 a%"),
+        eb(
+          "documentType",
+          "=",
+          "Begäran från skyddsombud om ingripande"
+        ),
+      ])
+    )
+    .groupBy(sql`year`)
+    .orderBy(sql`year`)
+    .execute();
+  return result.map(row => ({
+    date: row.year!,
+    value: Number(row.caseCount),
+  }));
+}
+
+
+export async function countSixSixACasesPerEmployer(
+  db: Kysely<DiariumDatabase>,
+  limit = 20
+): Promise<{ name: string; value: number }[]> {
+  const result = await db
+    .selectFrom("documents")
+    .select([
+      "companyName",
+      sql<number>`count(distinct caseId)`.as("caseCount"),
+    ])
+    .where((eb) =>
+      eb.or([
+        eb(sql`lower(caseName)`, "like", "%6:6a%"),
+        eb(sql`lower(caseName)`, "like", "%6-6a%"),
+        eb(sql`lower(caseName)`, "like", "%6 kap. 6 a%"),
+        eb(sql`lower(caseSubject)`, "like", "%6:6a%"),
+        eb(sql`lower(caseSubject)`, "like", "%6-6a%"),
+        eb(sql`lower(caseSubject)`, "like", "%6 kap. 6 a%"),
+        eb(
+          "documentType",
+          "=",
+          "Begäran från skyddsombud om ingripande"
+        ),
+      ])
+    )
+    .where("companyName", "is not", null)
+    .where("companyName", "!=", "")
+    .groupBy("companyName")
+    .orderBy("caseCount", "desc")
+    .limit(limit)
+    .execute();
+
+  return result.map((row) => ({
+    name: row.companyName!,
+    value: Number(row.caseCount),
+  }));
+}
+
 export async function countAsbestDocumentsPerYear(
   db: Kysely<DiariumDatabase>
 ): Promise<{ date: string; value: number }[]> {

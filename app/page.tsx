@@ -3,7 +3,15 @@ import { Container } from "@svenskamodellen/components/Container";
 import { Main } from "@svenskamodellen/components/Main";
 import { TopLevelHeading } from "@svenskamodellen/components/TopLevelHeading";
 
-import { countAsbestDocumentsPerYear, countCovidTillbudPerMonth, countDocumentsPerYear, countInspektionDocumentsPerYear, countOlycksfallCasesPerYear, initKysely } from "@/lib/database";
+import {
+  countAsbestDocumentsPerYear,
+  countCovidTillbudPerMonth,
+  countDocumentsPerYear,
+  countInspektionDocumentsPerYear,
+  countOlycksfallCasesPerYear,
+  countSixSixACasesPerYear,
+  initKysely,
+} from "@/lib/database";
 import { DateRangeBarChart } from "@/components/DateRangeBarChart";
 
 export default async function Home() {
@@ -13,6 +21,7 @@ export default async function Home() {
   const inspektionDocumentsPerYear = await countInspektionDocumentsPerYear(db);
   const olycksfallCasesPerYear = await countOlycksfallCasesPerYear(db);
   const asbestDocumentsPerYear = await countAsbestDocumentsPerYear(db);
+  const sixSixACasesPerYear = await countSixSixACasesPerYear(db);
   const covidTillbudPerMonth = await countCovidTillbudPerMonth(db);
 
   return (
@@ -65,6 +74,15 @@ export default async function Home() {
               data={asbestDocumentsPerYear}
               valueLabel="Handlingar"
               hrefPattern="/{date}/asbest"
+            />
+
+            <DateRangeBarChart
+              title="6:6a-ärenden"
+              description="Antalet 6:6a-ärenden per år."
+              data={sixSixACasesPerYear}
+              valueLabel="Ärenden"
+              titleHref="/66a"
+              hrefPattern="/{date}/66a"
             />
           </div>
 
