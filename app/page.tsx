@@ -36,6 +36,8 @@ export default async function Home() {
         <Container className="flex flex-col items-start space-y-8">
           <TopLevelHeading text="Arbetsmiljödata och -statistik" subtext="Mönster och trender i Arbetsmiljöverkets diarium" />
 
+          <p className="max-w-prose body-text">Den här sidan är en del av webbprojektet <a className="text-link underline" href="https://svenskamodellen.github.io/">Svenska Modellen</a> och är tänkt att göra Arbetsmiljöverkets diarium mer överblickbart och begripligt med hjälp av datavisualisering.</p>
+
           <DateRangeBarChart
             title="Handlingar per år"
             description="Antalet handlingar per år."
