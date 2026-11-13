@@ -6,8 +6,11 @@ All filesystem lookups in this repo assume a runtime context matching the struct
 
 ## Commands
 
-- Run `YEAR=2023 pnpm ingest` to run an incremental update of the 2023 dataset
-- Run `pnpm combine` to combine all yearly data into one single database
+- Run `make db.sqlite` to download the latest database from the `data` release
+- Run `make ingest` (or `YEAR=2025 make ingest`) to scrape new documents into it
+- Run `make upload` to publish the local database to the `data` release
+- Run `make pull` to discard the local database and download it again
+- Run `pnpm combine` to rebuild the database from the yearly repos
 - Run `pnpm diarium --help` to list the other diarium CLI commands
 - Run `pnpm test` to run the diarium scraper tests
 - Run `pnpm dev` to run the dev server at http://localhost:3000/.

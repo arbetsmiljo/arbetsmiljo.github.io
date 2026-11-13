@@ -165,5 +165,20 @@ export function importDocuments(
 ): void {
   const db = new Database(dst);
   db.exec(`ATTACH DATABASE '${src}' AS src`);
-  db.exec(`INSERT OR IGNORE INTO documents SELECT * FROM src.documents`);
+  // Rows are inserted one by one through the primary key so that corrupt source
+  // indexes can't smuggle in duplicates. When a document appears more than
+  // once, the most recently scraped version wins.
+  const columns = (
+    db.prepare("SELECT name FROM pragma_table_info('documents')").all() as {
+      name: string;
+    }[]
+  )
+    .map(({ name }) => name)
+    .filter((name) => name !== "documentId");
+  db.exec(`
+    INSERT INTO documents SELECT * FROM src.documents NOT INDEXED WHERE true
+    ON CONFLICT (documentId) DO UPDATE SET
+      ${columns.map((c) => `${c} = excluded.${c}`).join(", ")}
+    WHERE excluded.created > documents.created
+  `);
 }
