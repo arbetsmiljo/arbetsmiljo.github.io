@@ -1,0 +1,1 @@
+self.__SSG_MANIFEST=new Set(["\u002F[year]","\u002F[year]\u002F66a","\u002F[year]\u002F[county]","\u002F[year]\u002F[county]\u002F[municipality]","\u002F[year]\u002Fasbest","\u002F[year]\u002Fgeografi","\u002F[year]\u002Finspektioner","\u002F[year]\u002Folycksfall"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()
