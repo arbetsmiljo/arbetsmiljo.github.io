@@ -63,7 +63,6 @@
   },
   "scripts": {
     "build": "next build",
-    "combine": "rm -f db.sqlite && tsx bin/diarium.ts combineDatabases ../arbetsmiljo-2020/db.sqlite ../arbetsmiljo-2021/db.sqlite ../arbetsmiljo-2022/db.sqlite ../arbetsmiljo-2023/db.sqlite ../arbetsmiljo-2024/db.sqlite ../arbetsmiljo-2025/db.sqlite ../arbetsmiljo-2026/db.sqlite --dst db.sqlite",
     "deploy": "npx gh-pages --nojekyll --no-history --branch gh-pages -d out --repo git@github.com:arbetsmiljo/arbetsmiljo.github.io.git",
     "dev": "next dev",
     "diarium": "tsx bin/diarium.ts",

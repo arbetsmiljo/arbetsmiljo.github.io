@@ -10,7 +10,6 @@ All filesystem lookups in this repo assume a runtime context matching the struct
 - Run `make ingest` (or `YEAR=2025 make ingest`) to scrape new documents into it
 - Run `make upload` to publish the local database to the `data` release
 - Run `make pull` to discard the local database and download it again
-- Run `pnpm combine` to rebuild the database from the yearly repos
 - Run `pnpm diarium --help` to list the other diarium CLI commands
 - Run `pnpm test` to run the diarium scraper tests
 - Run `pnpm dev` to run the dev server at http://localhost:3000/.
