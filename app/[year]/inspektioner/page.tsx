@@ -26,7 +26,7 @@ import {
   countDocumentsByInspectionType,
   type YearProps
 } from "@/lib/year";
-import { generateDiariumUrl } from "@/lib/diarium";
+import { diariumSearchUrl } from "@/lib/diarium/url";
 
 export async function generateMetadata(props: YearProps): Promise<Metadata> {
   const { year } = await props.params;
@@ -113,7 +113,7 @@ export default async function Inspections(props: YearProps) {
                           <TableCell className="px-0">
                             <a
                               className="text-link underline body-text"
-                              href={generateDiariumUrl({
+                              href={diariumSearchUrl({
                                 SearchText: `Inspektion inom ${inspectionType}`,
                                 FromDate: format(
                                   startOfYear(

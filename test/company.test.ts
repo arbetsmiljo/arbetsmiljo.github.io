@@ -1,4 +1,4 @@
-import { CompanyIdSchema } from "../src/company";
+import { CompanyIdSchema } from "../lib/diarium/company";
 
 describe("CompanyIdSchema", () => {
   it("accepts a valid ID", () => {

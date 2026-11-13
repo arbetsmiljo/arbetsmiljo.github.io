@@ -2,8 +2,8 @@ import Database from "better-sqlite3";
 
 
 import { Generated, Kysely, SqliteDialect, sql } from "kysely";
-import { type DiariumCase, DiariumCaseSchema } from "./case.js";
-import { type DiariumDocument, DiariumDocumentSchema } from "./document.js";
+import { type DiariumCase, DiariumCaseSchema } from "./case";
+import { type DiariumDocument, DiariumDocumentSchema } from "./document";
 
 type DiariumDocumentsTable = DiariumDocument &
   DiariumCase & {
@@ -100,7 +100,7 @@ export async function writeDocument(
 export async function readDocument(
   db: Kysely<DiariumDatabase>,
   id: string,
-): Promise<any> {
+) {
   const document = await db
     .selectFrom("documents")
     .selectAll()

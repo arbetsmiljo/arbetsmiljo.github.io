@@ -1,36 +1,7 @@
-import Database from "better-sqlite3";
-import { sql } from "kysely";
-import { Generated, Kysely, SqliteDialect } from "kysely";
+import { sql, Kysely } from "kysely";
+import { DiariumDatabase } from "./diarium/database";
 
-export type DiariumDocument = {
-  documentId: string;
-  documentDate: string;
-  documentOrigin: string;
-  documentType: string;
-  caseId: string;
-  caseName: string;
-  caseSubject: string;
-  companyId?: string;
-  companyName?: string;
-  workplaceId?: string;
-  workplaceName?: string;
-  countyId?: string;
-  countyName?: string;
-  municipalityId?: string;
-  municipalityName?: string;
-  created: Generated<Date>;
-};
-
-export interface DiariumDatabase {
-  documents: DiariumDocument;
-}
-
-export function initKysely(filename: string): Kysely<DiariumDatabase> {
-  const database = new Database(filename);
-  const dialect = new SqliteDialect({ database });
-  const db = new Kysely<DiariumDatabase>({ dialect });
-  return db;
-}
+export { initKysely } from "./diarium/database";
 
 export async function countDocumentsPerYear(
   db: Kysely<DiariumDatabase>

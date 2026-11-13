@@ -1,6 +1,11 @@
 import Database from "better-sqlite3";
 import { Kysely, SelectQueryBuilder, SqliteDialect, sql } from "kysely";
-import { DiariumDatabase } from "./database";
+import { DiariumDatabase } from "./diarium/database";
+import type { DiariumCountyId, DiariumCountyName } from "./diarium/county";
+import type {
+  DiariumMunicipalityId,
+  DiariumMunicipalityName,
+} from "./diarium/municipality";
 import { listDaysInYear } from "./time";
 
 export type YearProps = {
@@ -117,8 +122,8 @@ export async function countCaseNameKeywordMatches(
 }
 
 type County = {
-  countyId: string;
-  countyName: string;
+  countyId: DiariumCountyId;
+  countyName: DiariumCountyName;
 };
 
 export async function selectDistinctCounties(
@@ -140,8 +145,8 @@ export async function selectDistinctCounties(
 }
 
 type Municipality = {
-  municipalityId: string;
-  municipalityName: string;
+  municipalityId: DiariumMunicipalityId;
+  municipalityName: DiariumMunicipalityName;
 };
 
 export async function selectDistinctCountiesAndMunicipalities(
@@ -178,7 +183,7 @@ export async function selectDistinctCountiesAndMunicipalities(
 
 export async function countDocumentsByCounty(
   db: Kysely<DiariumDatabase>,
-): Promise<{ countyName: string; documentCount: number }[]> {
+): Promise<{ countyName: DiariumCountyName; documentCount: number }[]> {
   const result = await db
     .selectFrom("documents")
     .select(["countyName", db.fn.count("documentId").as("documentCount")])
@@ -194,8 +199,8 @@ export async function countDocumentsByCounty(
 
 export async function countDocumentsByMunicipality(
   db: Kysely<DiariumDatabase>,
-  countyName: string,
-): Promise<{ municipalityName: string; documentCount: number }[]> {
+  countyName: DiariumCountyName,
+): Promise<{ municipalityName: DiariumMunicipalityName; documentCount: number }[]> {
   const result = await db
     .selectFrom("documents")
     .select(["municipalityName", db.fn.count("documentId").as("documentCount")])
@@ -254,7 +259,7 @@ export async function countDocumentsByMunicipalityNameKeyword(
   db: Kysely<DiariumDatabase>,
   keyword: string,
 ): Promise<
-  { municipalityName: string; countyName: string; documentCount: number }[]
+  { municipalityName: DiariumMunicipalityName; countyName: DiariumCountyName; documentCount: number }[]
 > {
   const result = await db
     .selectFrom("documents")

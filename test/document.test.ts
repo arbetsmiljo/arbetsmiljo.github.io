@@ -3,7 +3,7 @@ import {
   DiariumDocumentDateSchema,
   DiariumDocumentOriginSchema,
   DiariumDocumentTypeSchema,
-} from "../src/document";
+} from "../lib/diarium/document";
 
 describe("DiariumDocumentIdSchema", () => {
   it("accepts a valid ID", () => {

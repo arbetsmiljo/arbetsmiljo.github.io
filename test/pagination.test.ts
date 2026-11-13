@@ -1,7 +1,7 @@
 jest.mock("cross-fetch", () => jest.fn());
 
 import fs from "fs";
-import { fetchDiariumPage } from "../src/pagination";
+import { fetchDiariumPage } from "../lib/diarium/pagination";
 import fetch from "cross-fetch";
 import { gunzipSync } from "zlib";
 

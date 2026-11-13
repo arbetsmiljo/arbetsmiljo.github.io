@@ -2,25 +2,17 @@
 
 import { Command } from "commander";
 import { parseISO, isFuture } from "date-fns";
-import { readFileSync, existsSync } from "fs";
-
-
-import { initKysely, createDatabase, readDocument, importDocuments } from "./database.js";
-import { fetchDiariumCase } from "./case.js";
-import { ingestDiariumDay } from "./ingestion.js";
-import { fetchDiariumPage } from "./pagination.js";
-import { generateDateRange } from "./time.js";
-import { dirname } from "node:path";
-import { fileURLToPath } from "node:url";
-
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-const pkg = JSON.parse(readFileSync(`${__dirname}/../package.json`, "utf8"));
+import { existsSync } from "fs";
+import { initKysely, createDatabase, readDocument, importDocuments } from "../lib/diarium/database";
+import { fetchDiariumCase } from "../lib/diarium/case";
+import { ingestDiariumDay } from "../lib/diarium/ingestion";
+import { fetchDiariumPage } from "../lib/diarium/pagination";
+import { generateDateRange } from "../lib/diarium/time";
 
 const program = new Command();
-program.name(pkg.name).description(pkg.description).version(pkg.name);
-
+program
+  .name("diarium")
+  .description("SQLite & web scraper tooling for work environment data");
 
 program
   .command("combineDatabases")

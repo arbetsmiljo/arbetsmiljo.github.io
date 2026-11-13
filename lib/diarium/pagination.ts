@@ -1,8 +1,9 @@
 import { JSDOM } from "jsdom";
 import _ from "lodash";
 import fetch from "cross-fetch";
-import { type DiariumDocument, DiariumDocumentSchema } from "./document.js";
+import { type DiariumDocument, DiariumDocumentSchema } from "./document";
 import z from "zod";
+import { diariumSearchUrl } from "./url";
 
 export type DiariumPage = {
   documents: DiariumDocument[];
@@ -35,15 +36,13 @@ export async function fetchDiariumPage(
   date: string,
   page: number,
 ): Promise<DiariumPage> {
-  const baseUrl = `https://www.av.se/om-oss/diarium-och-allmanna-handlingar/bestall-handlingar/?`;
-  const query = {
+  const searchUrl = diariumSearchUrl({
     FromDate: date,
     ToDate: date,
     sortDirection: "asc",
     sortOrder: "Dokumentdatum",
     p: `${page}`,
-  };
-  const searchUrl = `${baseUrl}${new URLSearchParams(query)}`;
+  });
   const response = await fetch(searchUrl, {
     headers: {
       Cookie: "cookieacceptpreferences=0%2c1;",

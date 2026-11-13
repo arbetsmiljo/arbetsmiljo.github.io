@@ -1,4 +1,4 @@
-import { WorkplaceIdSchema } from "../src/workplace";
+import { WorkplaceIdSchema } from "../lib/diarium/workplace";
 
 describe("WorkplaceIdSchema", () => {
   it("accepts a valid ID", () => {

@@ -1,7 +1,7 @@
 jest.mock("cross-fetch", () => jest.fn());
 
 import fs from "fs";
-import { DiariumCaseIdSchema, fetchDiariumCase } from "../src/case";
+import { DiariumCaseIdSchema, fetchDiariumCase } from "../lib/diarium/case";
 import fetch from "cross-fetch";
 import { gunzipSync } from "zlib";
 

@@ -17,7 +17,7 @@ import {
   selectSixSixACases,
   type YearProps
 } from "@/lib/year";
-import { generateDiariumUrl } from "@/lib/diarium";
+import { diariumSearchUrl } from "@/lib/diarium/url";
 import { format, parseISO } from "date-fns";
 import {
   Table,
@@ -110,7 +110,7 @@ export default async function SixSixA(props: YearProps) {
                       <TableCell className="px-0 whitespace-nowrap">
                         <a
                           className="text-link underline"
-                          href={generateDiariumUrl({
+                          href={diariumSearchUrl({
                             SearchText: sixSixACase.caseId,
                           })}
                         >

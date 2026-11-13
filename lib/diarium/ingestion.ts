@@ -3,12 +3,12 @@ import {
   DiariumDatabase,
   readDocument,
   writeDocument,
-} from "./database.js";
-import { fetchDiariumCase } from "./case.js";
-import { DiariumPage, fetchDiariumPage } from "./pagination.js";
+} from "./database";
+import { fetchDiariumCase } from "./case";
+import { DiariumPage, fetchDiariumPage } from "./pagination";
 import ora from "ora-classic";
 import { Kysely } from "kysely";
-import { delay } from "./time.js";
+import { delay } from "./time";
 
 export async function ingestDiariumDay(
   db: Kysely<DiariumDatabase>,
@@ -20,7 +20,7 @@ export async function ingestDiariumDay(
   const documentCount = await countDocuments(db, date);
 
   do {
-    let pageSpinner = ora(` ${date} page ${pageNumber}`).start();
+    const pageSpinner = ora(` ${date} page ${pageNumber}`).start();
     page = await fetchDiariumPage(date, pageNumber);
     await delay(ms);
     if (documentCount >= page.total) {

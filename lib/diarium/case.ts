@@ -3,22 +3,23 @@ import _ from "lodash";
 import fetch from "cross-fetch";
 import z from "zod";
 
-import { CompanyIdSchema, CompanyNameSchema } from "./company.js";
-import { WorkplaceIdSchema, WorkplaceNameSchema } from "./workplace.js";
+import { CompanyIdSchema, CompanyNameSchema } from "./company";
+import { WorkplaceIdSchema, WorkplaceNameSchema } from "./workplace";
+import { diariumCaseUrl } from "./url";
 
 import {
   type DiariumCountyId,
   type DiariumCountyName,
   DiariumCountyIdSchema,
   DiariumCountyNameSchema,
-} from "./county.js";
+} from "./county";
 
 import {
   type DiariumMunicipalityId,
   type DiariumMunicipalityName,
   DiariumMunicipalityIdSchema,
   DiariumMunicipalityNameSchema,
-} from "./municipality.js";
+} from "./municipality";
 
 /**
  * Data model for case metadata
@@ -100,8 +101,7 @@ const optional = (text: string | null) =>
  * Fetch metadata about a document from the Arbetsmiljöverket website.
  */
 export async function fetchDiariumCase(caseId: string): Promise<DiariumCase> {
-  const baseUrl = `https://www.av.se/om-oss/diarium-och-allmanna-handlingar/bestall-handlingar/Case/?id=`;
-  const caseUrl = `${baseUrl}${caseId}`;
+  const caseUrl = diariumCaseUrl(caseId);
   const response = await fetch(caseUrl, {
     headers: {
       Cookie: "cookieacceptpreferences=0%2c1;",
@@ -117,7 +117,7 @@ export async function fetchDiariumCase(caseId: string): Promise<DiariumCase> {
   }
   const caseName = trim(h1.textContent);
 
-  const caseContainer = h1?.parentElement!.parentElement!;
+  const caseContainer = h1.parentElement!.parentElement!;
   const caseDefinitions = dl(caseContainer);
   const caseSubject = caseDefinitions["Ämnesområde"];
   const companyId = optional(caseDefinitions["Organisationsnummer"]);
