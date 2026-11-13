@@ -20,16 +20,28 @@ export async function selectYears(): Promise<string[]> {
   return rows.map((row) => row.year);
 }
 
+const yearKyselys = new Map<string, Kysely<DiariumDatabase>>();
+
 export function initYearKysely(year: string): Kysely<DiariumDatabase> {
   if (!/^\d{4}$/.test(year)) throw new Error(`Invalid year: ${year}`);
-  const database = new Database("db.sqlite");
-  // Unqualified table names resolve to the temp schema before main, so this
-  // view scopes every query on this connection to the given year.
-  database.exec(
-    `CREATE TEMP VIEW documents AS SELECT * FROM main.documents WHERE documentDate LIKE '${year}-%'`,
-  );
+  const cached = yearKyselys.get(year);
+  if (cached) return cached;
+  // Copy the year's rows into an indexed in-memory database once per worker
+  // rather than scanning the whole combined database on every page.
+  const database = new Database(":memory:");
+  database.exec(`
+    ATTACH DATABASE 'db.sqlite' AS source;
+    CREATE TABLE documents AS SELECT * FROM source.documents
+      WHERE documentDate >= '${year}-01-01' AND documentDate < '${Number(year) + 1}-01-01';
+    DETACH DATABASE source;
+    CREATE INDEX documents_documentDate ON documents (documentDate);
+    CREATE INDEX documents_countyId ON documents (countyId, documentDate);
+    CREATE INDEX documents_municipalityId ON documents (municipalityId, documentDate);
+    CREATE INDEX documents_countyName ON documents (countyName, municipalityName);
+  `);
   const dialect = new SqliteDialect({ database });
   const db = new Kysely<DiariumDatabase>({ dialect });
+  yearKyselys.set(year, db);
   return db;
 }
 
