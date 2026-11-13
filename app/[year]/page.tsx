@@ -1,0 +1,179 @@
+import _ from "lodash";
+import { Breadcrumbs } from "@svenskamodellen/components/Breadcrumb";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@svenskamodellen/components/Card";
+import { Container } from "@svenskamodellen/components/Container";
+import { Main } from "@svenskamodellen/components/Main";
+import { TopLevelHeading } from "@svenskamodellen/components/TopLevelHeading";
+import { DailyBarChart } from "@/components/DailyBarChart";
+import { PercentagePieChart } from "@/components/PercentagePieChart";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@svenskamodellen/components/Table";
+import { Metadata } from "next";
+import {
+  initYearKysely,
+  countTotalDocuments,
+  countDocumentsPerDay,
+  countCaseNameKeywordMatches,
+  countDocumentsByCounty,
+  countCasesPerSeason,
+  type YearProps
+} from "@/lib/year";
+import { slugify } from "@/lib/slugify";
+import { SeasonBarChart } from "@/components/SeasonBarChart";
+
+export async function generateMetadata(props: YearProps): Promise<Metadata> {
+  const { year } = await props.params;
+  return {
+    title: `Arbetsmiljö ${year}`,
+  };
+}
+export default async function Home(props: YearProps) {
+  const { year } = await props.params;
+  const db = initYearKysely(year);
+
+  const totalDocuments = await countTotalDocuments(db);
+  const documentsPerDay = await countDocumentsPerDay(db, year);
+  const keywordMatches = await countCaseNameKeywordMatches(db, [
+    "asbest",
+    "inspektion",
+    "olycksfall",
+  ]);
+  const documentsByCounty = await countDocumentsByCounty(db);
+  const accidentCasesPerSeason = await countCasesPerSeason(db, "olycksfall");
+
+  return (
+    <>
+      <Breadcrumbs>
+        {{
+          "https://svenskamodellen.github.io/": "Svenska modellen",
+          "/": "Arbetsmiljö",
+          [`/${year}`]: `${year}`,
+        }}
+      </Breadcrumbs>
+      <Main>
+        <Container className="flex flex-col items-start space-y-8 pb-8">
+          <TopLevelHeading
+            text={`Arbetsmiljödata och -statistik ${year}`}
+          />
+
+          <DailyBarChart
+            title="Handlingar per dag"
+            description="Antalet handlingar per dag genom året."
+            data={documentsPerDay}
+            valueLabel="Handlingar"
+          />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 w-full">
+            <PercentagePieChart
+              title="Inspektionshandlingar"
+              href={`/${year}/inspektioner`}
+              description="Andelen handlingar som innehåller ordet 'inspektion'"
+              numerator={keywordMatches.inspektion}
+              denominator={totalDocuments}
+              numeratorLabel="Inspektion"
+              complementLabel="Icke-inspektion"
+              percentSuffix="Inspektioner"
+            />
+
+            <SeasonBarChart
+              title="Olycksfall"
+              description="Antalet ärenden som innehåller ordet 'olycksfall' per säsong."
+              data={accidentCasesPerSeason}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 w-full">
+            <Card className="flex flex-col gap-y-4 border-background-secondary">
+              <CardHeader className="flex flex-row items-stretch space-y-0 border-background-secondary border-b p-0 sm:flex-row">
+                <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
+                  <CardTitle>
+                    <a
+                      href={`/${year}/geografi`}
+                      className="text-link underline"
+                    >
+                      Geografisk fördelning
+                    </a>
+                  </CardTitle>
+                  <CardDescription>Antalet handlingar per län</CardDescription>
+                </div>
+              </CardHeader>
+              <CardContent className="flex-1 pb-4">
+                <Table className="text-base">
+                  <TableHeader>
+                    <TableRow className="border-background-secondary">
+                      <TableHead className="font-bold px-0">Län</TableHead>
+                      <TableHead className="font-bold px-0">
+                        Handlingar
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {documentsByCounty
+                      .slice(0, 5)
+                      .map(({ countyName, documentCount }) => (
+                        <TableRow
+                          key={countyName}
+                          className="border-background-secondary"
+                        >
+                          <TableCell className="font-medium px-0">
+                            <a
+                              className="underline text-link"
+                              href={`/${year}/${slugify(countyName)}`}
+                            >
+                              {_.capitalize(countyName)}
+                            </a>
+                          </TableCell>
+                          <TableCell>{documentCount}</TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+            <PercentagePieChart
+              title="Asbesthandlingar"
+              href={`/${year}/asbest`}
+              description="Andelen handlingar som innehåller ordet 'asbest'"
+              numerator={keywordMatches.asbest}
+              denominator={totalDocuments}
+              numeratorLabel="Asbest"
+              complementLabel="Icke-asbest"
+              percentSuffix="Asbest"
+            />
+
+            <Card className="flex flex-col gap-y-4 border-background-secondary">
+              <CardHeader className="flex flex-row items-stretch space-y-0 border-background-secondary border-b p-0 sm:flex-row">
+                <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
+                  <CardTitle>
+                    <a
+                      href={`/${year}/66a`}
+                      className="text-link underline"
+                    >
+                      6:6a-begäranden
+                    </a>
+                  </CardTitle>
+                  <CardDescription>
+                    Statistik över begäranden från skyddsombud enligt 6 kap. 6 a §
+                    arbetsmiljölagen
+                  </CardDescription>
+                </div>
+              </CardHeader>
+            </Card>
+          </div>
+        </Container>
+      </Main>
+    </>
+  );
+}

@@ -1,0 +1,133 @@
+import _ from "lodash";
+import { Breadcrumbs } from "@svenskamodellen/components/Breadcrumb";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@svenskamodellen/components/Card";
+import { Container } from "@svenskamodellen/components/Container";
+import { Main } from "@svenskamodellen/components/Main";
+import { TopLevelHeading } from "@svenskamodellen/components/TopLevelHeading";
+import { DailyBarChart } from "@/components/DailyBarChart";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@svenskamodellen/components/Table";
+import {
+  initYearKysely,
+  selectDistinctCounties,
+  countDocumentsPerDay,
+  countDocumentsByMunicipality,
+} from "@/lib/year";
+import { slugify } from "@/lib/slugify";
+
+type CountyParams = {
+  year: string;
+  county: string;
+};
+
+type CountyProps = {
+  params: Promise<CountyParams>;
+};
+
+export async function generateStaticParams({
+  params: { year },
+}: {
+  params: { year: string };
+}): Promise<Pick<CountyParams, "county">[]> {
+  const db = initYearKysely(year);
+  const counties = await selectDistinctCounties(db);
+  return counties.map((county) => ({ county: slugify(county.countyName) }));
+}
+
+export default async function County(props: CountyProps) {
+  const params = await props.params;
+  const { year } = params;
+  const db = initYearKysely(year);
+  const counties = await selectDistinctCounties(db);
+  const county = counties.find(
+    (county) => slugify(county.countyName) === params.county,
+  )!;
+  const documentsPerDay = await countDocumentsPerDay(db, year, (q) =>
+    q.where("countyId", "=", county.countyId),
+  );
+
+  const documentsByMunicipality = await countDocumentsByMunicipality(
+    db,
+    county.countyName,
+  );
+
+  return (
+    <>
+      <Breadcrumbs>
+        {{
+          "https://svenskamodellen.github.io/": "Svenska modellen",
+          "/": "Arbetsmiljö",
+          [`/${year}`]: `${year}`,
+          [`/${year}/geografi`]: "Geografi",
+          [`/${year}/${slugify(county.countyName)}`]: `${_.capitalize(county.countyName)}`,
+        }}
+      </Breadcrumbs>
+
+      <Main>
+        <Container className="flex flex-col items-start space-y-8 pb-8">
+          <TopLevelHeading
+            text={`Arbetsmiljö ${_.capitalize(county.countyName)} ${year}`}
+          />
+
+          <DailyBarChart
+            title="Handlingar per dag"
+            description="Visar antalet handlingar per dag genom året."
+            data={documentsPerDay}
+            valueLabel="Handlingar"
+          />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 w-full">
+            <Card className="flex flex-col gap-y-4 border-background-secondary">
+              <CardHeader className="items-center pb-0">
+                <CardTitle>Geografisk fördelning</CardTitle>
+                <CardDescription>Antal handlingar per kommun</CardDescription>
+              </CardHeader>
+              <CardContent className="flex-1 pb-4">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="border-background-secondary">
+                      <TableHead className="font-bold">Län</TableHead>
+                      <TableHead className="font-bold">Handlingar</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {documentsByMunicipality.map(
+                      ({ municipalityName, documentCount }) => (
+                        <TableRow
+                          key={municipalityName}
+                          className="border-background-secondary"
+                        >
+                          <TableCell className="font-medium">
+                            <a
+                              className="underline text-link"
+                              href={`/${year}/${slugify(county.countyName)}/${slugify(municipalityName)}`}
+                            >
+                              {_.capitalize(municipalityName)}
+                            </a>
+                          </TableCell>
+                          <TableCell>{documentCount}</TableCell>
+                        </TableRow>
+                      ),
+                    )}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </div>
+        </Container>
+      </Main>
+    </>
+  );
+}

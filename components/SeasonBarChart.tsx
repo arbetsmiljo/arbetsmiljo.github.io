@@ -1,0 +1,105 @@
+"use client";
+
+import { FC } from "react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  LabelList,
+  XAxis,
+  YAxis,
+} from "recharts";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@svenskamodellen/components/Card";
+import { ChartContainer } from "@svenskamodellen/components/Chart";
+
+type SeasonBarChartProps = {
+  title: string;
+  href?: string;
+  description: string;
+  data: { season: string; count: number }[];
+};
+
+const t: (key: string) => string = (key) => {
+  if (key === "spring") return "Vår";
+  if (key === "summer") return "Sommar";
+  if (key === "autumn") return "Höst";
+  if (key === "winter") return "Vinter";
+  return key;
+};
+
+export const SeasonBarChart: FC<SeasonBarChartProps> = ({
+  title,
+  href,
+  description,
+  data,
+}) => {
+  return (
+    <Card className="flex flex-col border-background-secondary">
+      <CardHeader className="flex flex-row items-stretch space-y-0 border-background-secondary border-b p-0 sm:flex-row">
+        <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
+          <CardTitle>
+            {href ? (
+              <a className="text-link underline" href={href}>
+                {title}
+              </a>
+            ) : (
+              title
+            )}
+          </CardTitle>
+          <CardDescription>{description}</CardDescription>
+        </div>
+      </CardHeader>
+      <CardContent className="flex-1 py-2 flex items-center">
+        <ChartContainer config={{}} className="aspect-auto h-[250px] w-full">
+          <BarChart
+            accessibilityLayer
+            data={data}
+            layout="vertical"
+            margin={{
+              right: 16,
+            }}
+          >
+            <CartesianGrid vertical={false} horizontal={false} />
+            <YAxis
+              dataKey="season"
+              type="category"
+              tickLine={false}
+              tickMargin={0}
+              axisLine={false}
+              hide={true}
+            />
+            <XAxis dataKey="count" type="number" hide />
+
+            <Bar
+              dataKey="count"
+              radius={4}
+              fill="var(--color-foreground)"
+            >
+              <LabelList
+                dataKey="season"
+                position="insideLeft"
+                offset={8}
+                className="fill-background"
+                fontSize={16}
+                formatter={(value) => t(String(value))}
+              />
+              <LabelList
+                dataKey="count"
+                position="right"
+                offset={8}
+                className="fill-foreground"
+                fontSize={16}
+              />
+            </Bar>
+          </BarChart>
+        </ChartContainer>
+      </CardContent>
+    </Card>
+  );
+};
